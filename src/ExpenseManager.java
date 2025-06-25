@@ -1,0 +1,116 @@
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.FileNotFoundException;
+import java.time.LocalDate;
+
+public class ExpenseManager implements Expenser{
+	
+
+		@Override
+		public boolean loadExpenseFile(String filePath) {
+			//Building this code to read a file with three parts on each line:
+			// item, price, date YYYY-MM-DD (With commas required)
+			ArrayList<Expense> expenses = new ArrayList<>();
+			try{
+			File file = new File(filePath);
+			Scanner scnr = new Scanner(file);
+
+			
+			while(scnr.hasNextLine()) {	
+				String Line = scnr.nextLine();
+				String [] parts = Line.split(",");
+				
+				if(parts.length == 3) {
+					String type = parts[0];
+		            double amount = Double.parseDouble(parts[1]);
+		            LocalDate date = LocalDate.parse(parts[2]);
+
+		            Expense e = new Expense(type, amount, date);
+		            expenses.add(e);
+				}
+			}
+			 scnr.close();
+			  System.out.println("Loaded " + expenses.size() + " expenses!");
+			}
+			catch(FileNotFoundException e){
+				System.out.println("File not found: " + e.getMessage());
+				return false;
+			}
+			
+			
+			return true;
+		}
+
+		@Override
+		public void addExpense(Expense Ex) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void addMonthlyIncome(Wage W) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void PrintFullreport() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void PrintExpensereport() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void PrintIncomereport() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void PrintIncomereportbyTpe() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void PrintExpensebyType() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void exportReport(String reportTitle) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public Currency convertForeignCurrency(Currency C, double amount) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public boolean loadIncomeFile(String filePath) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public int whenCanIBuy(String itemname, double price) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public void updateMonthlySavings() {
+			// TODO Auto-generated method stub
+			
+		}
+}
