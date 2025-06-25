@@ -9,8 +9,7 @@ public class driver {
 		ExpenseManager test = new ExpenseManager();
 		test.loadExpenseFile(FileName);
 		
-		
-		
+		System.out.println("Tested!");
 	}
 	
 
