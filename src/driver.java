@@ -70,6 +70,42 @@ public class driver {
 		test.PrintExpensebyType();
 		
 		
+		
+		
+		
+		
+		//test run addMonthlyIncome()
+		/*System.out.println("What is your job title:");
+		String job = scnr.nextLine();
+		System.out.println("Enter the month:");
+		String Month = scnr.next();
+		System.out.println("Enter your monthly wage:");
+		double monthlyIncome = scnr.nextDouble();
+		
+		//creating a Wage object
+		Wage wage = new Wage(job, monthlyIncome, Month);
+		test.addMonthlyIncome(wage); */
+		
+		
+		
+		//test run addExpense()
+		System.out.println("What is the Expense type:");
+		String type = scnr.nextLine();
+		//scnr.nextLine(); 
+		System.out.println("Enter the amount:");
+		double amount = scnr.nextDouble();
+		scnr.nextLine(); 
+		System.out.println("Enter a date (YYYY-MM-DD):");
+	    String input = scnr.nextLine();
+	    LocalDate date = LocalDate.parse(input);
+		//creating a Wage object
+		Expense expense = new Expense(type, amount, date);
+		test.addExpense(expense);
+		
+		
+
+		
+		
 	
 	
 	

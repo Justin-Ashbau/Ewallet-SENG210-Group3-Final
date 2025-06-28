@@ -3,10 +3,14 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.FileNotFoundException;
+import java.time.LocalDate;
 
 public class ExpenseManager implements Expenser{
 	Scanner scnr = new Scanner(System.in);
-	
+
 	
 	//expenses holds objects of Expense
 	ArrayList <Expense> expenses = new ArrayList<>();
@@ -163,9 +167,8 @@ public class ExpenseManager implements Expenser{
 					System.out.println("File not found: " + e.getMessage());
 					return false;
 				}
-			return false;
+			return true;
 		}
-
 		@Override
 		public int whenCanIBuy(String itemname, double price) {
 			// TODO Auto-generated method stub
