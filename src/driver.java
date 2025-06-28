@@ -17,9 +17,11 @@ public class driver {
 		//test.loadExpenseFile(FileName); 
 		
 	
-		
-		
-		
+		//testing loadIncomeFile(String filePath)
+		//use this filename: C:\Users\skkae\Documents\Income.txt
+		System.out.println("Enter file name: ");
+		String FileName = scnr.nextLine();
+		test.loadIncomeFile(FileName);
 		
 		
 		
@@ -66,6 +68,31 @@ public class driver {
 		}
 		
 		test.PrintExpensebyType();
+		
+		
+		
+		
+		
+		
+		test.PrintExpensebyType();
+		
+		
+	
+		
+		//test run addMonthlyIncome()
+		/*System.out.println("What is your job title:");
+		String job = scnr.nextLine();
+		System.out.println("Enter the month:");
+		String Month = scnr.next();
+		System.out.println("Enter your monthly wage:");
+		double monthlyIncome = scnr.nextDouble();
+		
+		//creating a Wage object
+		Wage wage = new Wage(job, monthlyIncome, Month);
+		test.addMonthlyIncome(wage); */
+		
+		
+
 		
 		
 	

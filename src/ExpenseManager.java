@@ -3,9 +3,24 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.FileNotFoundException;
+import java.time.LocalDate;
 
 public class ExpenseManager implements Expenser{
 	Scanner scnr = new Scanner(System.in);
+
+	
+	//expenses holds objects of Expense
+	ArrayList <Expense> expenses = new ArrayList<>();
+	
+	//Establishes that wages stores Wage objects
+	ArrayList <Wage> wages = new ArrayList<>();
+	
+	ArrayList <Wage> income = new ArrayList<>();
+	
+	
 	
 	
 	//expenses holds objects of Expense
@@ -20,7 +35,7 @@ public class ExpenseManager implements Expenser{
 		public boolean loadExpenseFile(String filePath) {
 			//Building this code to read a file with three parts on each line:
 			// item, price, date YYYY-MM-DD (With commas required)
-			ArrayList<Expense> expenses = new ArrayList<>();
+			
 			try{
 			File file = new File(filePath);
 			Scanner scnr = new Scanner(file);
@@ -129,10 +144,40 @@ public class ExpenseManager implements Expenser{
 
 		@Override
 		public boolean loadIncomeFile(String filePath) {
-			// TODO Auto-generated method stub
-			return false;
-		}
+			//source= job title
+			//amount = income amount
+			//Month
+			//ArrayList <Wage> income = new ArrayList<>();
 
+			//using arraylist wage
+			//stored in an private arraylist in class user
+			try{
+				File file = new File(filePath);
+				Scanner scnr = new Scanner(file);
+
+				
+				while(scnr.hasNextLine()) {	
+					String Line = scnr.nextLine();
+					String [] parts = Line.split(",");
+					
+					if(parts.length == 3) {
+						String source = parts[0];
+			            double amount = Double.parseDouble(parts[1]);
+			            String Month = parts[2];
+
+			            Wage e = new Wage(source, amount, Month);
+			            income.add(e);
+					}
+				}
+				 scnr.close();
+				  System.out.println("Loaded " + income.size() + " expenses!");
+				}
+				catch(FileNotFoundException e){
+					System.out.println("File not found: " + e.getMessage());
+					return false;
+				}
+			return true;
+		}
 		@Override
 		public int whenCanIBuy(String itemname, double price) {
 			// TODO Auto-generated method stub
