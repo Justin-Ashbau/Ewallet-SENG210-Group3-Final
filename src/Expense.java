@@ -18,5 +18,8 @@ public class Expense {
     public String toString() {
         return   type + " , " +  amount + " , " + date;
     }
+	public String getType() {
+	    return type;
+	}
 
 }
