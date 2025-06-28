@@ -67,12 +67,16 @@ public class driver {
 		}
 		}
 		
+		
+		
+		
+		
+		
+		
 		test.PrintExpensebyType();
 		
 		
-		
-		
-		
+	
 		
 		//test run addMonthlyIncome()
 		/*System.out.println("What is your job title:");
