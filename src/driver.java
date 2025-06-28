@@ -87,22 +87,6 @@ public class driver {
 		test.addMonthlyIncome(wage); */
 		
 		
-		
-		//test run addExpense()
-		System.out.println("What is the Expense type:");
-		String type = scnr.nextLine();
-		//scnr.nextLine(); 
-		System.out.println("Enter the amount:");
-		double amount = scnr.nextDouble();
-		scnr.nextLine(); 
-		System.out.println("Enter a date (YYYY-MM-DD):");
-	    String input = scnr.nextLine();
-	    LocalDate date = LocalDate.parse(input);
-		//creating a Wage object
-		Expense expense = new Expense(type, amount, date);
-		test.addExpense(expense);
-		
-		
 
 		
 		
