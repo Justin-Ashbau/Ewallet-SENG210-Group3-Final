@@ -94,7 +94,8 @@ public class ExpenseManager implements Expenser{
 
 		@Override
 		public void PrintExpensebyType() {
-			// TODO Auto-generated method stub
+			System.out.println("Enter the type:");
+			String search = scnr.nextLine();
 			
 		}
 
