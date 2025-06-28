@@ -38,20 +38,34 @@ public class driver {
 		
 		
 		//test run addExpense()
+		boolean runCount = true;
+		while(runCount) {
 		System.out.println("What is the Expense type:");
-		String type = scnr.nextLine();
+		String type = scnr.nextLine().trim();
+		
 		//scnr.nextLine(); 
 		System.out.println("Enter the amount:");
 		double amount = scnr.nextDouble();
 		scnr.nextLine(); 
+		
 		System.out.println("Enter a date (YYYY-MM-DD):");
-	    String input = scnr.nextLine();
+	    String input = scnr.nextLine().trim();
 	    LocalDate date = LocalDate.parse(input);
+	    
 		//creating a Wage object
 		Expense expense = new Expense(type, amount, date);
 		test.addExpense(expense);
 		
+		System.out.println("Would you like to add another expense? (yes or no)");
+		String answer = scnr.nextLine().trim();
+			    
+		if (answer.equalsIgnoreCase("no")) {
+			runCount = false;
+			break;
+		}
+		}
 		
+		test.PrintExpensebyType();
 		
 		
 	

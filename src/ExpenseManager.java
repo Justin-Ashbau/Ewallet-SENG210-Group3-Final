@@ -7,6 +7,15 @@ import java.time.LocalDate;
 public class ExpenseManager implements Expenser{
 	Scanner scnr = new Scanner(System.in);
 	
+	
+	//expenses holds objects of Expense
+	ArrayList <Expense> expenses = new ArrayList<>();
+	
+	//Establishes that wages stores Wage objects
+	ArrayList <Wage> wages = new ArrayList<>();
+	
+	
+	
 		@Override
 		public boolean loadExpenseFile(String filePath) {
 			//Building this code to read a file with three parts on each line:
@@ -45,9 +54,7 @@ public class ExpenseManager implements Expenser{
 		@Override
 		public void addExpense(Expense Ex) {
 			//this method works: someone enters in a Expense object, () and it gets stored into the arrayList expenses
-			//expenses holds objects of Expense 
-			
-			ArrayList <Expense> expenses = new ArrayList<>();
+						
 			//storing the wage object in the array
 			expenses.add(Ex);
 			System.out.println(expenses);
@@ -59,8 +66,7 @@ public class ExpenseManager implements Expenser{
 			//wages holds objects of Wage 
 			
 			
-			//Establishes that wages stores Wage objects
-			ArrayList <Wage> wages = new ArrayList<>();
+			
 			//storing the wage object in the array
 			wages.add(W);
 			System.out.println(wages);
@@ -96,7 +102,17 @@ public class ExpenseManager implements Expenser{
 		public void PrintExpensebyType() {
 			System.out.println("Enter the type:");
 			String search = scnr.nextLine();
+			String find[];
+			//create arraylist to store all matches and then print them out
+			ArrayList<Expense> typeTracker = new ArrayList<Expense>();
 			
+			for(Expense word : expenses) {
+				//System.out.println("Checking: [" + word.getType() + "] vs [" + search + "]");
+				if(word.getType().trim().equalsIgnoreCase(search)) {
+					typeTracker.add(word);					
+				}
+			}
+			System.out.print(typeTracker);
 		}
 
 		@Override
