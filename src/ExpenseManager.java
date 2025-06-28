@@ -5,8 +5,8 @@ import java.io.FileNotFoundException;
 import java.time.LocalDate;
 
 public class ExpenseManager implements Expenser{
+	Scanner scnr = new Scanner(System.in);
 	
-
 		@Override
 		public boolean loadExpenseFile(String filePath) {
 			//Building this code to read a file with three parts on each line:
@@ -44,13 +44,27 @@ public class ExpenseManager implements Expenser{
 
 		@Override
 		public void addExpense(Expense Ex) {
-			// TODO Auto-generated method stub
+			//this method works: someone enters in a Expense object, () and it gets stored into the arrayList expenses
+			//expenses holds objects of Expense 
 			
+			ArrayList <Expense> expenses = new ArrayList<>();
+			//storing the wage object in the array
+			expenses.add(Ex);
+			System.out.println(expenses);
 		}
 
 		@Override
 		public void addMonthlyIncome(Wage W) {
-			// TODO Auto-generated method stub
+			//this method works: someone enters in a wage object, (job title, month, salary) and it gets stored into the arrayList wages
+			//wages holds objects of Wage 
+			
+			
+			//Establishes that wages stores Wage objects
+			ArrayList <Wage> wages = new ArrayList<>();
+			//storing the wage object in the array
+			wages.add(W);
+			System.out.println(wages);
+			
 			
 		}
 

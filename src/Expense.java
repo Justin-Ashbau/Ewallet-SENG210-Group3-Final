@@ -5,7 +5,7 @@ public class Expense {
 	String source;
 	double amount;
 	int yearlyfrequency; //1 for 1 time or once a year, 12 for monthly or or 24 for biweekly
-	//should add contructor(s)
+	
 	String type;
 	LocalDate date; 
 	
@@ -14,4 +14,9 @@ public class Expense {
         this.amount = amount;
         this.date = date;
     }
+	@Override
+    public String toString() {
+        return   type + " , " +  amount + "," + date;
+    }
+
 }
