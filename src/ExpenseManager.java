@@ -14,6 +14,7 @@ import java.time.LocalDate;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridLayout;
 import javax.swing.*;
 
@@ -96,6 +97,8 @@ public class ExpenseManager implements Expenser{
 			
 			//storing the wage object in the array
 			wages.add(W);
+			Component frame = null;
+			JOptionPane.showMessageDialog(frame, wages);
 			System.out.println(wages);
 			
 			
