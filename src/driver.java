@@ -15,8 +15,8 @@ public class driver {
 	//button2: //testing loadExpenseFile()                C:\Users\skkae\Documents\Expenses.txt
 	//button3: //testing loadIncomeFile(String filePath)   C:\Users\skkae\Documents\Income.txt
 	//button4: //addExpense()
-	//button5:
-	//button6: //for lisa
+	//button5: //printExpensebyType()
+	//button6: //I made extra buttons for lisa
 	//button7:
 	
 	
@@ -103,11 +103,13 @@ public class driver {
 	        frame.add(button4);
 
 	        // BUTTON 5
-	        JButton button5 = new JButton("Button 5");
+	        JButton button5 = new JButton("Print Expenses");
 	        button5.setBackground(new Color(255, 182, 193));
 	        button5.setOpaque(true);
 	        button5.setBorderPainted(false);
-	        button5.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Hi from Button 5"));
+	        button5.addActionListener(e -> {
+	        test.PrintExpensebyType();
+	        });
 	        frame.add(button5);
 
 	        // BUTTON 6
@@ -115,7 +117,6 @@ public class driver {
 	        button6.setBackground(new Color(255, 182, 193));
 	        button6.setOpaque(true);
 	        button6.setBorderPainted(false);
-	        button6.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Shutting down..."));
 	        frame.add(button6);
 
 	        // BUTTON 7
@@ -123,7 +124,6 @@ public class driver {
 	        button7.setBackground(new Color(255, 182, 193));
 	        button7.setOpaque(true);
 	        button7.setBorderPainted(false);
-	        button7.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Lucky 7!"));
 	        frame.add(button7);
 
 	        // Add empty label to fill last cell (2x4 = 8 total spots)
@@ -142,34 +142,7 @@ public class driver {
 	
 		
 		
-		/*
-		//test run addExpense()
-		boolean runCount = true;
-		while(runCount) {
-		System.out.println("What is the Expense type:");
-		String type = scnr.nextLine().trim();
-		
-		//scnr.nextLine(); 
-		System.out.println("Enter the amount:");
-		double amount = scnr.nextDouble();
-		scnr.nextLine(); 
-		
-		System.out.println("Enter a date (YYYY-MM-DD):");
-	    String input = scnr.nextLine().trim();
-	    LocalDate date = LocalDate.parse(input);
-	    
-		//creating a Wage object
-		Expense expense = new Expense(type, amount, date);
-		test.addExpense(expense);
-		
-		System.out.println("Would you like to add another expense? (yes or no)");
-		String answer = scnr.nextLine().trim();
-			    
-		if (answer.equalsIgnoreCase("no")) {
-			runCount = false;
-			break;
-		}
-		} */
+	
 		
 		test.PrintExpensebyType();
 		
@@ -178,7 +151,6 @@ public class driver {
 		
 		
 		
-		//test.PrintExpensebyType();
 		
 		
 	
