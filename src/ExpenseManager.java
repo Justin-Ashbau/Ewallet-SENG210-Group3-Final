@@ -1,6 +1,9 @@
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import javax.swing.JOptionPane;
+
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,10 +13,11 @@ import java.time.LocalDate;
 
 public class ExpenseManager implements Expenser{
 	Scanner scnr = new Scanner(System.in);
+	static String Print;
 
 	
 	//expenses holds objects of Expense
-	ArrayList <Expense> expenses = new ArrayList<>();
+	static ArrayList <Expense> expenses = new ArrayList<>();
 	
 	//Establishes that wages stores Wage objects
 	ArrayList <Wage> wages = new ArrayList<>();
@@ -55,7 +59,8 @@ public class ExpenseManager implements Expenser{
 				}
 			}
 			 scnr.close();
-			  System.out.println("Loaded " + expenses.size() + " expenses!");
+			 this.Print = "Loaded " + expenses.size() + " expenses!";
+			  //System.out.println("Loaded " + expenses.size() + " expenses!");
 			}
 			catch(FileNotFoundException e){
 				System.out.println("File not found: " + e.getMessage());
