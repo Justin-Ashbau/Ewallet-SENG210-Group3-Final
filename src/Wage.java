@@ -14,6 +14,6 @@ public class Wage {
 	//Overrides the class so when it prints the array, it prints actual strings
 	@Override
     public String toString() {
-        return "Source: " + source + ", Amount: " + amount + ", Month: " + Month;
+        return "job: " + source + ", Amount: " + amount + ", Month: " + Month;
     }
 }
