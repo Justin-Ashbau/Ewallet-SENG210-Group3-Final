@@ -11,6 +11,13 @@ import java.util.Scanner;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
+import javax.swing.*;
+
+
 public class ExpenseManager implements Expenser{
 	Scanner scnr = new Scanner(System.in);
 	static String Print;
@@ -59,7 +66,7 @@ public class ExpenseManager implements Expenser{
 				}
 			}
 			 scnr.close();
-			 this.Print = "Loaded " + expenses.size() + " expenses!";
+			 System.out.println("Loaded " + expenses.size() + " expenses!");
 			  //System.out.println("Loaded " + expenses.size() + " expenses!");
 			}
 			catch(FileNotFoundException e){
@@ -175,12 +182,12 @@ public class ExpenseManager implements Expenser{
 					}
 				}
 				 scnr.close();
-				  System.out.println("Loaded " + income.size() + " expenses!");
+				  System.out.println("Loaded " + income.size() + " Income!");
 				}
 				catch(FileNotFoundException e){
 					System.out.println("File not found: " + e.getMessage());
 					return false;
-				}
+				} 
 			return true;
 		}
 		@Override
