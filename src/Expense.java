@@ -16,7 +16,7 @@ public class Expense {
     }
 	@Override
     public String toString() {
-        return   type + " , " +  amount + " , " + date;
+        return   type + " , $" +  amount + " , " + date;
     }
 	public String getType() {
 	    return type;
