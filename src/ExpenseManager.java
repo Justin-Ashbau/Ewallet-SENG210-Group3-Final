@@ -67,6 +67,8 @@ public class ExpenseManager implements Expenser{
 				}
 			}
 			 scnr.close();
+			 Component frame = null;
+				JOptionPane.showMessageDialog(frame, "Loaded " + expenses.size() + " expenses!");
 			 System.out.println("Loaded " + expenses.size() + " expenses!");
 			  //System.out.println("Loaded " + expenses.size() + " expenses!");
 			}
@@ -86,6 +88,8 @@ public class ExpenseManager implements Expenser{
 			//storing the wage object in the array
 			expenses.add(Ex);
 			System.out.println(expenses);
+			 Component frame = null;
+				JOptionPane.showMessageDialog(frame, expenses);
 		}
 
 		@Override
@@ -186,6 +190,8 @@ public class ExpenseManager implements Expenser{
 				}
 				 scnr.close();
 				  System.out.println("Loaded " + income.size() + " Income!");
+				  Component frame = null;
+					JOptionPane.showMessageDialog(frame, "Loaded " + income.size() + " rows of Income!");
 				}
 				catch(FileNotFoundException e){
 					System.out.println("File not found: " + e.getMessage());

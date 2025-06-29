@@ -10,14 +10,13 @@ import javax.swing.*;
 
 public class driver {
 	
-	// go back and add how many income and expensesto gui
-	//implement the gui later in EWalletApp Class
+	
 	//button1: //addMonthlyIncome()
 	//button2: //testing loadExpenseFile()                C:\Users\skkae\Documents\Expenses.txt
 	//button3: //testing loadIncomeFile(String filePath)   C:\Users\skkae\Documents\Income.txt
-	//button4:
+	//button4: //addExpense()
 	//button5:
-	//button6:
+	//button6: //for lisa
 	//button7:
 	
 	
@@ -60,7 +59,7 @@ public class driver {
 	    		//System.out.println("Enter file name: ");
 	        	String FileName = JOptionPane.showInputDialog("Enter file name:");   		
 	    		test.loadExpenseFile(FileName); 
-	    		JOptionPane.showMessageDialog(frame, "Loaded Expenses Successfully!");
+	    		
 	        });
 	        frame.add(button2);
 
@@ -76,16 +75,31 @@ public class driver {
 	        	
 	    		String FileName = JOptionPane.showInputDialog("Enter file name: ");
 	    		test.loadIncomeFile(FileName);
-	    		JOptionPane.showMessageDialog(frame, "Loaded Income Successfully!");
+	    		
 	        });
 	        frame.add(button3);
 
 	        // BUTTON 4
-	        JButton button4 = new JButton("Button 4");
+	        JButton button4 = new JButton("Add Expense");
 	        button4.setBackground(new Color(255, 182, 193));
 	        button4.setOpaque(true);
 	        button4.setBorderPainted(false);
-	        button4.addActionListener(e -> frame.setTitle("Button 4 was clicked"));
+	        button4.addActionListener(e -> {
+	    		//test run addExpense()
+	        	String type = JOptionPane.showInputDialog("What is the Expense type:"); 
+	        	String amount1 = JOptionPane.showInputDialog("Enter the amount:"); 
+	        	double amount = Double.parseDouble(amount1.trim());
+	        	String date1 = JOptionPane.showInputDialog("Enter a date (YYYY-MM-DD):");
+	        	LocalDate date = LocalDate.parse(date1);
+	        	
+	    	    
+	    		//creating a Wage object
+	    		Expense expense = new Expense(type, amount, date);
+	    		test.addExpense(expense);
+	    		
+	    	
+	        
+	        });
 	        frame.add(button4);
 
 	        // BUTTON 5
@@ -168,18 +182,6 @@ public class driver {
 		
 		
 	
-		
-		//test run addMonthlyIncome()
-		/*System.out.println("What is your job title:");
-		String job = scnr.nextLine();
-		System.out.println("Enter the month:");
-		String Month = scnr.next();
-		System.out.println("Enter your monthly wage:");
-		double monthlyIncome = scnr.nextDouble();
-		
-		//creating a Wage object
-		Wage wage = new Wage(job, monthlyIncome, Month);
-		test.addMonthlyIncome(wage); */
 		
 		
 
