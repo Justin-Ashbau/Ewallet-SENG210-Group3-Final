@@ -9,7 +9,17 @@ import javax.swing.*;
 
 
 public class driver {
+	
+	// go back and add how many income and expensesto gui
 	//implement the gui later in EWalletApp Class
+	//button1:
+	//button2: //testing loadExpenseFile()                C:\Users\skkae\Documents\Expenses.txt
+	//button3: //testing loadIncomeFile(String filePath)   C:\Users\skkae\Documents\Income.txt
+	//button4:
+	//button5:
+	//button6:
+	//button7:
+	
 	
 	
 	public static void main(String[] args) {
@@ -31,15 +41,21 @@ public class driver {
 	        frame.add(button1);
 
 	        // BUTTON 2
-	        JButton button2 = new JButton("Button 2");
+	        JButton button2 = new JButton("Add Expenses");
 	        button2.setBackground(new Color(255, 182, 193));
 	        button2.setOpaque(true);
 	        button2.setBorderPainted(false);
-	        button2.addActionListener(e -> System.out.println("Button 2 pressed"));
+	        button2.addActionListener(e -> {
+	        	//testing loadExpenseFile()
+	    		//System.out.println("Enter file name: ");
+	        	String FileName = JOptionPane.showInputDialog("Enter file name:");   		
+	    		test.loadExpenseFile(FileName); 
+	    		JOptionPane.showMessageDialog(frame, "Loaded Expenses Successfully!");
+	        });
 	        frame.add(button2);
 
 	        // BUTTON 3
-	        JButton button3 = new JButton("Button 3");
+	        JButton button3 = new JButton("Add Income");
 	        button3.setBackground(new Color(255, 182, 193));
 	        button3.setOpaque(true);
 	        button3.setBorderPainted(false);
@@ -50,7 +66,7 @@ public class driver {
 	        	
 	    		String FileName = JOptionPane.showInputDialog("Enter file name: ");
 	    		test.loadIncomeFile(FileName);
-	    		JOptionPane.showMessageDialog(frame, "Loaded  expenses!");
+	    		JOptionPane.showMessageDialog(frame, "Loaded Income Successfully!");
 	        });
 	        frame.add(button3);
 
@@ -92,11 +108,7 @@ public class driver {
 	        frame.setVisible(true);
 		
 		
-		//testing loadExpenseFile()
-		//System.out.println("Enter file name: ");
-		//String FileName = scnr.nextLine();
-		 
-		//test.loadExpenseFile(FileName); 
+		
 		
 	
 		
