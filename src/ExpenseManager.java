@@ -125,8 +125,11 @@ public class ExpenseManager implements Expenser{
 
 		@Override
 		public void PrintExpensebyType() {
-			System.out.println("Enter the type:");
-			String search = scnr.nextLine();
+			
+			 Component frame = null;
+			 String search = JOptionPane.showInputDialog("Enter the type of Expense you want to see:");
+			
+			
 			String find[];
 			//create arraylist to store all matches and then print them out
 			ArrayList<Expense> typeTracker = new ArrayList<Expense>();
@@ -138,6 +141,7 @@ public class ExpenseManager implements Expenser{
 				}
 			}
 			System.out.print(typeTracker);
+			JOptionPane.showMessageDialog(frame, typeTracker);
 		}
 
 		@Override
