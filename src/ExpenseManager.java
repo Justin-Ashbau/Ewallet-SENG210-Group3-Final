@@ -22,8 +22,9 @@ import javax.swing.*;
 public class ExpenseManager implements Expenser{
 	Scanner scnr = new Scanner(System.in);
 	static String Print;
-
 	
+	//I think we should get rid of the expenses and wages in this class and keep them in the user class -Damian
+
 	//expenses holds objects of Expense
 	static ArrayList <Expense> expenses = new ArrayList<>();
 	
@@ -110,8 +111,41 @@ public class ExpenseManager implements Expenser{
 
 		@Override
 		public void PrintFullreport() {
-			// TODO Auto-generated method stub
-			
+			System.out.println("<<Full Report>>");
+	    	float totalExpense = 0;
+	    	float totalIncome = 0; 
+	    	for (Expense s : userAtHand.getSpending()) {
+	    		totalExpense += s.amount * s.yearlyfrequency; // calculate total expense based on frequency
+	    	}
+	    	for (Wage w : userAtHand.getIncome()) {
+	    		totalIncome += w.amount;
+	    	}
+	    	
+	    	PrintExpensereport();
+	    	System.out.println("Total yearly expenses: $" + totalExpense);
+	    	
+	    	PrintIncomereport();
+	    	for (String m : new String[] {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"}) {
+	    		float monthlyIncome = 0;
+				for (Wage w : userAtHand.getIncome()) {
+					if (w.Month.equals(m)) {
+						monthlyIncome += w.amount;
+					}
+				}
+				
+				if (monthlyIncome != 0) { //only print if there is income(s) for the month
+					System.out.println("Total income for " + m + ": $" + monthlyIncome);
+				}
+	    	}
+	    	
+	    	System.out.println("Total yearly income: $" + totalIncome);
+	    	
+	    	double totalSavings = (totalIncome - totalExpense);
+	    	if (totalSavings >= 0) {
+	    		System.out.println("Total savings: $" + totalSavings);
+	    	} else {
+	    		System.out.println("Total new debt: $" + totalSavings);
+	    	}
 		}
 
 		@Override
@@ -211,7 +245,20 @@ public class ExpenseManager implements Expenser{
 
 		@Override
 		public void updateMonthlySavings() {
-			// TODO Auto-generated method stub
-			
+			float monthlyExpense = 0;
+	    	float monthlyIncome = 0; 
+	    	for (Expense s : userAtHand.getSpending()) {
+	    		if (s.yearlyfrequency >= 12) { // only consider monthly or biweekly expenses
+	    			monthlyExpense += s.amount * (s.yearlyfrequency / 12); // calculate total expense based on frequency
+	    		}
+	    	}
+	    	String curMonth = userAtHand.getIncome().get(userAtHand.getIncome().size() - 1).Month;
+	    	for (Wage w : userAtHand.getIncome()) {
+	    		if (w.Month.equals(curMonth)) {
+	    			monthlyIncome += w.amount;
+	    		}
+	    	}
+	    	
+	    	userAtHand.setMonthlySavings(monthlyIncome - monthlyExpense);
 		}
 }
