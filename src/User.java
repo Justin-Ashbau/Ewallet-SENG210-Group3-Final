@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 public class User {
 	private ArrayList <Currency>currencyRates;
-	private ArrayList <Wage>Income;  // user income sources that user can record or view or search by type or month 
-	private ArrayList <Expense>Spending; //user's expenses 
+	private ArrayList <Wage>Income = new ArrayList<Wage>();  // user income sources that user can record or view or search by type or month 
+	private ArrayList <Expense>Spending = new ArrayList<Expense>(); //user's expenses 
 	
 	String username;
 	String pwd;
@@ -22,13 +22,22 @@ public class User {
 	public ArrayList<Expense> getSpending() {
 		return Spending;
 	}
+	public int getIncomeSize() {
+		return Income.size();
+	}
 	public void addExpense(Expense expense) {
 		Spending.add(expense);
+	}
+	public int getSpendingSize() {
+		return Spending.size();
 	}
 	public void setMonthlySavings(double savings) {
 		this.monthlysavings = savings;
 	}
 	
-	User(String username,String password){}
+	User(String username,String password){
+		this.username = username;
+		this.pwd = password;
+	}
 	
 }

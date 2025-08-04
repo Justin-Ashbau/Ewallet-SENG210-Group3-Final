@@ -24,7 +24,7 @@ public class driver {
 	public static void main(String[] args) {
 		
 		Scanner scnr = new Scanner(System.in);
-		ExpenseManager test = new ExpenseManager();
+		ExpenseManager test = new ExpenseManager(new User("Bob Jimothy", "mypwd123"));
 		
 		 JFrame frame = new JFrame("Seven Pink Buttons");
 	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,10 +42,8 @@ public class driver {
 	        	String monthlyIncome1 = JOptionPane.showInputDialog("Enter your monthly Wage:");
 	        	double monthlyIncome = Double.parseDouble(monthlyIncome1.trim());
 	        	
-	    		
 	    		//creating a Wage object
-	    		Wage wage = new Wage(job, monthlyIncome, Month);
-	    		test.addMonthlyIncome(wage); 
+	    		test.addMonthlyIncome(new Wage(job, monthlyIncome, Month)); 
 	        });
 	        frame.add(button1);
 
