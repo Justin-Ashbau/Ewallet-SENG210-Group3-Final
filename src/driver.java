@@ -85,14 +85,14 @@ public class driver {
 	        button4.addActionListener(e -> {
 	    		//test run addExpense()
 	        	String type = JOptionPane.showInputDialog("What is the Expense type:"); 
-	        	String amount1 = JOptionPane.showInputDialog("Enter the amount:"); 
-	        	double amount = Double.parseDouble(amount1.trim());
-	        	String date1 = JOptionPane.showInputDialog("Enter a date (YYYY-MM-DD):");
-	        	LocalDate date = LocalDate.parse(date1);
+	        	String amtInput = JOptionPane.showInputDialog("Enter the amount:"); 
+	        	double amount = Double.parseDouble(amtInput.trim());
+	        	String freqInput = JOptionPane.showInputDialog("Enter a yearly frequency (1 for once per year, 12 for monthly, or 24 for biweekly:");
+	        	Integer yearlyFreq = Integer.parseInt(freqInput);
 	        	
 	    	    
 	    		//creating a Wage object
-	    		Expense expense = new Expense(type, amount, date);
+	    		Expense expense = new Expense(type, amount, yearlyFreq);
 	    		test.addExpense(expense);
 	    		
 	    	
@@ -111,17 +111,24 @@ public class driver {
 	        frame.add(button5);
 
 	        // BUTTON 6
-	        JButton button6 = new JButton("Button 6");
+	        JButton button6 = new JButton("Print Full Report");
 	        button6.setBackground(new Color(255, 182, 193));
 	        button6.setOpaque(true);
 	        button6.setBorderPainted(false);
+	        button6.addActionListener(e -> {
+	        	test.PrintFullreport();
+	        });	        
 	        frame.add(button6);
 
+
 	        // BUTTON 7
-	        JButton button7 = new JButton("Button 7");
+	        JButton button7 = new JButton("Print Monthly Savings");
 	        button7.setBackground(new Color(255, 182, 193));
 	        button7.setOpaque(true);
 	        button7.setBorderPainted(false);
+	        button7.addActionListener(e -> {
+	        	System.out.println(test.userAtHand.getMonthlySavings());
+	        });
 	        frame.add(button7);
 
 	        // Add empty label to fill last cell (2x4 = 8 total spots)

@@ -6,20 +6,17 @@ public class Expense {
 	double amount;
 	int yearlyfrequency; //1 for 1 time or once a year, 12 for monthly or or 24 for biweekly
 	
-	String type;
-	LocalDate date; 
-	
-	public Expense(String type, double amount, LocalDate date) {
-        this.type = type;
+	public Expense(String type, double amount, int freq) {
+        this.source = type;
         this.amount = amount;
-        this.date = date;
+        this.yearlyfrequency = freq;
     }
 	@Override
     public String toString() {
-        return   type + " , $" +  amount + " , " + date;
+        return   source + " , $" +  amount + " , " + yearlyfrequency;
     }
 	public String getType() {
-	    return type;
+	    return source;
 	}
 
 }

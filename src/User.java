@@ -31,6 +31,9 @@ public class User {
 	public int getSpendingSize() {
 		return Spending.size();
 	}
+	public double getMonthlySavings() {
+		return this.monthlysavings;
+	}
 	public void setMonthlySavings(double savings) {
 		this.monthlysavings = savings;
 	}

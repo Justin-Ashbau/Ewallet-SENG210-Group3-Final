@@ -29,7 +29,7 @@ public class ExpenseManager implements Expenser{
 	@Override
 	public boolean loadExpenseFile(String filePath) {
 		//Building this code to read a file with three parts on each line:
-		// item, price, date YYYY-MM-DD (With commas required)
+		// item, price, yearly frequency (With commas required)
 		
 		try{
 		File file = new File(filePath);
@@ -43,9 +43,9 @@ public class ExpenseManager implements Expenser{
 			if(parts.length == 3) {
 				String type = parts[0];
 	            double amount = Double.parseDouble(parts[1]);
-	            LocalDate date = LocalDate.parse(parts[2]);
+	            int yearlyfrequency = Integer.parseInt(parts[2]);
 
-	            Expense e = new Expense(type, amount, date);
+	            Expense e = new Expense(type, amount, yearlyfrequency);
 	            userAtHand.addExpense(e);
 			}
 		}
@@ -71,8 +71,9 @@ public class ExpenseManager implements Expenser{
 		//storing the wage object in the array
 		userAtHand.addExpense(Ex);
 		System.out.println(userAtHand.getSpending());
-		 Component frame = null;
-			JOptionPane.showMessageDialog(frame, userAtHand.getSpending());
+		Component frame = null;
+		JOptionPane.showMessageDialog(frame, userAtHand.getSpending());
+		this.updateMonthlySavings();
 	}
 
 	@Override
@@ -87,8 +88,7 @@ public class ExpenseManager implements Expenser{
 		Component frame = null;
 		JOptionPane.showMessageDialog(frame, userAtHand.getIncome());
 		System.out.println(userAtHand.getIncome());
-		
-		
+		this.updateMonthlySavings();
 	}
 
 	@Override
@@ -229,6 +229,12 @@ public class ExpenseManager implements Expenser{
 	public void updateMonthlySavings() {
 		float monthlyExpense = 0;
     	float monthlyIncome = 0; 
+    	
+    	if (userAtHand.getSpendingSize() <= 0 || userAtHand.getIncomeSize() <= 0) {
+    		System.out.println("there is no spending or income to properly update");
+    		return;
+    	}
+    	
     	for (Expense s : userAtHand.getSpending()) {
     		if (s.yearlyfrequency >= 12) { // only consider monthly or biweekly expenses
     			monthlyExpense += s.amount * (s.yearlyfrequency / 12); // calculate total expense based on frequency
