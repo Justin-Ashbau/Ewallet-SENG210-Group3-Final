@@ -12,4 +12,30 @@ public class User {
 	double monthlysavings;	
 	//should add constructor(s)
 	User(String username,String password){}
+	
+	void setMonthlySavings(double newSavings) {
+		this.monthlysavings = newSavings;
+	}
+	
+	double getMonthlySavings(ExpenseManager manager) {
+		manager.updateMonthlySavings();
+		return monthlysavings;
+	}
+
+	public ArrayList<Wage> getIncome() {
+		return Income;
+	}
+
+	public ArrayList<Expense> getSpending() {
+		return Spending;
+	}
+	
+	public void addIncome(Wage w) {
+		this.Income.add(w);	
+	}
+	
+	public void addSpending(Expense e) {
+		this.Spending.add(e);
+	}
+	
 }
