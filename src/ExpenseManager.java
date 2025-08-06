@@ -4,11 +4,7 @@ import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
-import java.io.FileNotFoundException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.time.LocalDate;
 
 
@@ -177,7 +173,57 @@ public class ExpenseManager implements Expenser{
 
 		@Override
 		public void exportReport(String reportTitle) {
-			// TODO Auto-generated method stub
+			
+			Component frame = null;
+			
+			try {
+	            File report = new File(reportTitle + ".json");
+	            if (report.createNewFile()) {
+	                System.out.println(report.getName() + " created.");
+	            }
+	            else {
+	                System.out.println("File already exists");
+	                JOptionPane.showMessageDialog(frame, "File already exists.");
+	            }
+	        
+	            FileWriter reportWriter = new FileWriter(reportTitle + ".csv");
+	      
+	            switch (reportTitle.toLowerCase()) {
+
+	                case "expense":
+
+	                    ArrayList<Expense> expenses = userAtHand.getSpending();
+
+	                    for (int i = 0; i < expenses.size(); i++) {
+	                        reportWriter.write("$" + expenses.get(i).amount + " from " + expenses.get(i).source + " with a frequency of " + expenses.get(i).yearlyfrequency + " times a year.");
+	                    }
+
+	                    break;
+	                
+	                case "income":
+
+	                    ArrayList<Wage> income = userAtHand.getIncome();
+
+	                    for (int i = 0; i < income.size(); i++) {
+	                        reportWriter.write("$" + income.get(i).amount + " from " + income.get(i).source + " in the month of " + income.get(i).Month);
+	                    }
+
+	                    break;
+
+	            }
+
+	            reportWriter.close();
+
+	            System.out.println("Report successfully exported.");
+	            JOptionPane.showMessageDialog(frame, "Report successfully exported." );
+
+	        }
+
+	        catch (IOException e) {
+	            System.out.println("Unexpected error occcured exporting file");
+	            e.getStackTrace();
+	            JOptionPane.showMessageDialog(frame, "Unexpected error occcured exporting file");
+	        }
 			
 		}
 
@@ -228,7 +274,13 @@ public class ExpenseManager implements Expenser{
 		@Override
 		public int whenCanIBuy(String itemname, double price) {
 			// TODO Auto-generated method stub
-			return 0;
+			
+			Component frame = null;
+			int waitTime = (int)Math.round(price/userAtHand.monthlysavings);
+			
+			JOptionPane.showMessageDialog(frame, "You will be able to Purchase " + itemname + " in " + waitTime + " month(s).");
+			
+			return waitTime;
 		}
 
 		@Override
