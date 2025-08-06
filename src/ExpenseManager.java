@@ -144,7 +144,23 @@ public class ExpenseManager implements Expenser{
 
 	@Override
 	public void PrintIncomereportbyTpe() {
-		
+		Scanner scanner = new Scanner(System.in);
+	        System.out.print("Enter income type: ");
+	        String type = scanner.nextLine();
+
+	        double total = 0;
+		int count = 0;
+	        System.out.println("Type: " + type);
+
+	        for (int i = 0; i < userAtHand.getIncome().size(); i++) {
+	            if (userAtHand.getIncome().get(i).source.equalsIgnoreCase(type)) {
+	                System.out.println("Amount: $" + userAtHand.getIncome().get(i).amount + " in " + userAtHand.getIncome().get(i).Month);
+	                total += userAtHand.getIncome().get(i).amount;
+			count++;
+	            }
+	        }
+
+	        System.out.println("Total income for " + type + ": $" + total + " over " + count + " months");
 	}
 
 	@Override
@@ -176,7 +192,13 @@ public class ExpenseManager implements Expenser{
 
 	@Override
 	public Currency convertForeignCurrency(Currency C, double amount) {
-		return null;
+		Currency result = new Currency();
+
+	        result.name = C.name;
+	        result.rate = C.rate;
+	        System.out.println("Your balance in " + C.name + " from USD: " + amount / C.rate);
+
+	        return result;
 	}
 
 	@Override
