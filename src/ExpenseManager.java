@@ -160,18 +160,6 @@ public class ExpenseManager implements Expenser{
 	}
 
 	@Override
-	public void PrintExpensereport() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void PrintIncomereport() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void PrintIncomereportbyTpe() {
 		Scanner scanner = new Scanner(System.in);
 	        System.out.print("Enter income type: ");
