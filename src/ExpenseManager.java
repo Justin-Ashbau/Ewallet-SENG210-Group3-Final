@@ -1,10 +1,13 @@
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -76,6 +79,37 @@ public class ExpenseManager implements Expenser{
 		this.updateMonthlySavings();
 	}
 
+		@Override
+		public void PrintExpensereport() {
+			Component frame = null;
+			
+			ArrayList<Expense> expenses = userAtHand.getSpending();
+			ArrayList<String> report = new ArrayList<String>();
+			
+			for (int i = 0; i < expenses.size(); i++ ) {
+				report.add("$" + expenses.get(i).amount + " from " + expenses.get(i).source + " with a frequency of " + expenses.get(i).yearlyfrequency + " times a year.");
+			}
+			
+			System.out.println(report);
+			JOptionPane.showMessageDialog(frame, report);
+			
+		}
+
+		@Override
+		public void PrintIncomereport() {
+			Component frame = null;
+			
+			ArrayList<Wage> income = userAtHand.getIncome();
+			ArrayList<String> report = new ArrayList<String>();
+			
+			for (int i = 0; i < income.size(); i++ ) {
+				report.add("$" + income.get(i).amount + " from " + income.get(i).source + " in the month of " + income.get(i).Month);
+			}
+			
+			System.out.println(report);
+			JOptionPane.showMessageDialog(frame, report);
+    }
+ 
 	@Override
 	public void addMonthlyIncome(Wage W) {
 		//this method works: someone enters in a wage object, (job title, month, salary) and it gets stored into the arrayList wages
@@ -131,18 +165,6 @@ public class ExpenseManager implements Expenser{
 	}
 
 	@Override
-	public void PrintExpensereport() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void PrintIncomereport() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void PrintIncomereportbyTpe() {
 		Scanner scanner = new Scanner(System.in);
 	        System.out.print("Enter income type: ");
@@ -186,7 +208,57 @@ public class ExpenseManager implements Expenser{
 
 	@Override
 	public void exportReport(String reportTitle) {
-		// TODO Auto-generated method stub
+
+		Component frame = null;
+		
+		try {
+            File report = new File(reportTitle + ".json");
+            if (report.createNewFile()) {
+                System.out.println(report.getName() + " created.");
+            }
+            else {
+                System.out.println("File already exists");
+				JOptionPane.showMessageDialog(frame, "File already exists.");
+            }
+        
+            FileWriter reportWriter = new FileWriter(reportTitle + ".json");
+      
+            switch (reportTitle.toLowerCase()) {
+
+                case "expense":
+
+                    ArrayList<Expense> expenses = userAtHand.getSpending();
+
+                    for (int i = 0; i < expenses.size(); i++) {
+                        reportWriter.write("$" + expenses.get(i).amount + " from " + expenses.get(i).source + " with a frequency of " + expenses.get(i).yearlyfrequency + " times a year.");
+                    }
+
+                    break;
+                
+                case "income":
+
+                    ArrayList<Wage> income = userAtHand.getIncome();
+
+                    for (int i = 0; i < income.size(); i++) {
+                        reportWriter.write("$" + income.get(i).amount + " from " + income.get(i).source + " in the month of " + income.get(i).Month);
+                    }
+
+                    break;
+
+            }
+
+            reportWriter.close();
+
+            System.out.println("Report successfully exported.");
+			JOptionPane.showMessageDialog(frame, "Report successfully exported.");
+
+        }
+
+        catch (IOException e) {
+            System.out.println("Unexpected error occcured exporting file");
+            e.getStackTrace();
+			JOptionPane.showMessageDialog(frame, "Unexpected error occured during export.");
+        }
 		
 	}
 
@@ -240,10 +312,15 @@ public class ExpenseManager implements Expenser{
 		return true;
 	}
 	@Override
-	public int whenCanIBuy(String itemname, double price) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+		public int whenCanIBuy(String itemname, double price) {
+			
+			Component frame = null;
+			int waitTime = (int)Math.round(price/userAtHand.monthlysavings);
+			
+			JOptionPane.showMessageDialog(frame, "You will be able to Purchase " + itemname + " in " + waitTime + " month(s).");
+			
+			return waitTime;
+		}
 
 	@Override
 	public void updateMonthlySavings() {
