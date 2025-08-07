@@ -213,7 +213,6 @@ public class ExpenseManager implements Expenser{
 		try{
 			File file = new File(filePath);
 			Scanner scnr = new Scanner(file);
-
 			
 			while(scnr.hasNextLine()) {	
 				String Line = scnr.nextLine();
