@@ -133,7 +133,7 @@ public class driver {
         button7.setOpaque(true);
         button7.setBorderPainted(false);
         button7.addActionListener(e -> {
-        	System.out.println(test.userAtHand.getMonthlySavings());
+        	System.out.println(test.userAtHand.getMonthlySavings(test));
         });
         frame.add(button7);
 

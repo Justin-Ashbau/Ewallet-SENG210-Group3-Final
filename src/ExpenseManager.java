@@ -18,6 +18,8 @@ import javax.swing.*;
 public class ExpenseManager implements Expenser{
 	public User userAtHand;
 	
+	final static String[] MONTHS = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+	
 	public ExpenseManager (User user) {
 		userAtHand = user;
 	}
@@ -69,38 +71,37 @@ public class ExpenseManager implements Expenser{
 		System.out.println(userAtHand.getSpending());
 		Component frame = null;
 		JOptionPane.showMessageDialog(frame, userAtHand.getSpending());
-		this.updateMonthlySavings();
 	}
 
-		@Override
-		public void PrintExpensereport() {
-			Component frame = null;
-			
-			ArrayList<Expense> expenses = userAtHand.getSpending();
-			ArrayList<String> report = new ArrayList<String>();
-			
-			for (int i = 0; i < expenses.size(); i++ ) {
-				report.add("$" + expenses.get(i).amount + " from " + expenses.get(i).source + " with a frequency of " + expenses.get(i).yearlyfrequency + " times a year.");
-			}
-			
-			System.out.println(report);
-			JOptionPane.showMessageDialog(frame, report);
-			
+	@Override
+	public void PrintExpensereport() {
+		Component frame = null;
+		
+		ArrayList<Expense> expenses = userAtHand.getSpending();
+		ArrayList<String> report = new ArrayList<String>();
+		
+		for (int i = 0; i < expenses.size(); i++ ) {
+			report.add("$" + expenses.get(i).amount + " from " + expenses.get(i).source + " with a frequency of " + expenses.get(i).yearlyfrequency + " times a year.");
 		}
+		
+		System.out.println(report);
+		JOptionPane.showMessageDialog(frame, report);
+		
+	}
 
-		@Override
-		public void PrintIncomereport() {
-			Component frame = null;
-			
-			ArrayList<Wage> income = userAtHand.getIncome();
-			ArrayList<String> report = new ArrayList<String>();
-			
-			for (int i = 0; i < income.size(); i++ ) {
-				report.add("$" + income.get(i).amount + " from " + income.get(i).source + " in the month of " + income.get(i).Month);
-			}
-			
-			System.out.println(report);
-			JOptionPane.showMessageDialog(frame, report);
+	@Override
+	public void PrintIncomereport() {
+		Component frame = null;
+		
+		ArrayList<Wage> income = userAtHand.getIncome();
+		ArrayList<String> report = new ArrayList<String>();
+		
+		for (int i = 0; i < income.size(); i++ ) {
+			report.add("$" + income.get(i).amount + " from " + income.get(i).source + " in the month of " + income.get(i).Month);
+		}
+		
+		System.out.println(report);
+		JOptionPane.showMessageDialog(frame, report);
     }
  
 	@Override
@@ -115,7 +116,6 @@ public class ExpenseManager implements Expenser{
 		Component frame = null;
 		JOptionPane.showMessageDialog(frame, userAtHand.getIncome());
 		System.out.println(userAtHand.getIncome());
-		this.updateMonthlySavings();
 	}
 
 	@Override
@@ -134,7 +134,7 @@ public class ExpenseManager implements Expenser{
     	System.out.println("Total yearly expenses: $" + totalExpense);
     	
     	PrintIncomereport();
-    	for (String m : new String[] {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"}) {
+    	for (String m : MONTHS) {
     		float monthlyIncome = 0;
 			for (Wage w : userAtHand.getIncome()) {
 				if (w.Month.equals(m)) {
@@ -160,29 +160,29 @@ public class ExpenseManager implements Expenser{
 	@Override
 	public void PrintIncomereportbyTpe() {
 		Scanner scanner = new Scanner(System.in);
-	        System.out.print("Enter income type: ");
-	        String type = scanner.nextLine();
+        System.out.print("Enter income type: ");
+        String type = scanner.nextLine();
 
-	        double total = 0;
+        double total = 0;
 		int count = 0;
-	        System.out.println("Type: " + type);
+        System.out.println("Type: " + type);
 
-	        for (int i = 0; i < userAtHand.getIncome().size(); i++) {
-	            if (userAtHand.getIncome().get(i).source.equalsIgnoreCase(type)) {
-	                System.out.println("Amount: $" + userAtHand.getIncome().get(i).amount + " in " + userAtHand.getIncome().get(i).Month);
-	                total += userAtHand.getIncome().get(i).amount;
-			count++;
-	            }
-	        }
+        for (int i = 0; i < userAtHand.getIncome().size(); i++) {
+            if (userAtHand.getIncome().get(i).source.equalsIgnoreCase(type)) {
+                System.out.println("Amount: $" + userAtHand.getIncome().get(i).amount + " in " + userAtHand.getIncome().get(i).Month);
+                total += userAtHand.getIncome().get(i).amount;
+		count++;
+            }
+        }
 
-	        System.out.println("Total income for " + type + ": $" + total + " over " + count + " months");
+        System.out.println("Total income for " + type + ": $" + total + " over " + count + " months");
 	}
 
 	@Override
 	public void PrintExpensebyType() {
 		
-		 Component frame = null;
-		 String search = JOptionPane.showInputDialog("Enter the type of Expense you want to see:");
+		Component frame = null;
+		String search = JOptionPane.showInputDialog("Enter the type of Expense you want to see:");
 		
 		
 		String find[];
@@ -330,7 +330,20 @@ public class ExpenseManager implements Expenser{
     			monthlyExpense += s.amount * (s.yearlyfrequency / 12); // calculate total expense based on frequency
     		}
     	}
-    	String curMonth = userAtHand.getIncome().get(userAtHand.getIncome().size() - 1).Month;
+
+    	int greatestIndex = 0;
+    	for (int i = 0; i < MONTHS.length; i++) {
+    		for (Wage w : userAtHand.getIncome()) {
+    			if (MONTHS[i].compareTo(w.Month) == 0 && i > greatestIndex) {
+    				System.out.println(w.Month);
+    				greatestIndex = i;
+    			}
+    		}
+    	}
+    	
+    	String curMonth = MONTHS[greatestIndex];
+    	
+    	
     	for (Wage w : userAtHand.getIncome()) {
     		if (w.Month.equals(curMonth)) { //if the income is added during the latest possible month
     			monthlyIncome += w.amount;
