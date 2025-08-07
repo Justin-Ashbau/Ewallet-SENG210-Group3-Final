@@ -74,7 +74,6 @@ public class ExpenseManager implements Expenser{
 
 		@Override
 		public void PrintExpensereport() {
-			// TODO Auto-generated method stub
 			Component frame = null;
 			
 			ArrayList<Expense> expenses = userAtHand.getSpending();
@@ -91,7 +90,6 @@ public class ExpenseManager implements Expenser{
 
 		@Override
 		public void PrintIncomereport() {
-			// TODO Auto-generated method stub
 			Component frame = null;
 			
 			ArrayList<Wage> income = userAtHand.getIncome();
@@ -309,7 +307,6 @@ public class ExpenseManager implements Expenser{
   
 	@Override
 		public int whenCanIBuy(String itemname, double price) {
-			// TODO Auto-generated method stub
 			
 			Component frame = null;
 			int waitTime = (int)Math.round(price/userAtHand.monthlysavings);
