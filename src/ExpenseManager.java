@@ -343,7 +343,6 @@ public class ExpenseManager implements Expenser{
     	
     	String curMonth = MONTHS[greatestIndex];
     	
-    	
     	for (Wage w : userAtHand.getIncome()) {
     		if (w.Month.equals(curMonth)) { //if the income is added during the latest possible month
     			monthlyIncome += w.amount;

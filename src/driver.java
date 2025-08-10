@@ -3,13 +3,17 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.time.LocalDate;
 import javax.swing.*;
 
+import java.util.ArrayList;
 
 public class driver {
 	
+	static ArrayList<User> Users = new ArrayList<User>();
 	
 	//button1: //addMonthlyIncome()
 	//button2: //testing loadExpenseFile()                C:\Users\skkae\Documents\Expenses.txt
@@ -19,15 +23,92 @@ public class driver {
 	//button6: //I made extra buttons for lisa
 	//button7:
 	
+	static JFrame currentFrame;
+	static ExpenseManager manager;
+	
 	public static void main(String[] args) {
 		
-		Scanner scnr = new Scanner(System.in);
-		ExpenseManager test = new ExpenseManager(new User("Bob Jimothy", "mypwd123"));
+		Users.add(new User("Bob Jimothy", "mypwd123"));
 		
-		JFrame frame = new JFrame("Seven Pink Buttons");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 300);
-        frame.setLayout(new GridLayout(2, 4, 10, 10)); // 2 rows, 4 columns
+		openSignIn();
+	}
+	
+	static User signIn(String usr, String pswd) {
+		for (User u : Users) {
+			if (u.username.equals(usr) && u.pwd.equals(pswd)) {
+				return u;
+			}
+		}
+		
+		JOptionPane.showMessageDialog(currentFrame, "Username or password incorrect");;
+		return null;
+	}
+	
+	static void openSignIn() {
+		currentFrame = new JFrame("Sign in");
+		currentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		currentFrame.setSize(350, 350);
+		currentFrame.setLayout(new BorderLayout());
+		
+		JTextField userNameField = new JTextField();
+		userNameField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+		userNameField.setPreferredSize(new Dimension(100, 50));
+		
+		JLabel usrLabel = new JLabel("Username");
+		
+		JPanel usrPanel = new JPanel();
+		usrPanel.setLayout(new GridLayout(2, 1));
+		usrPanel.add(usrLabel);
+		usrPanel.add(userNameField);
+		
+		JTextField passwordField = new JTextField();
+		passwordField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+		passwordField.setPreferredSize(new Dimension(100, 50));
+		
+		JLabel passwordLabel = new JLabel("Password");
+		
+		JPanel passwordPanel = new JPanel();
+		passwordPanel.setLayout(new GridLayout(2, 1));
+		passwordPanel.add(passwordLabel);
+		passwordPanel.add(passwordField);
+		
+		JPanel entryPanel = new JPanel();
+		entryPanel.setLayout(new FlowLayout());
+		entryPanel.add(usrPanel);
+		entryPanel.add(passwordPanel);
+		
+		JButton submitButton = new JButton ("Submit");
+		submitButton.setOpaque(true);
+		submitButton.setPreferredSize(new Dimension(100, 50));
+		
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new FlowLayout());
+		buttonPanel.add(submitButton);
+		
+		submitButton.addActionListener(e -> {
+			User usrResult = signIn(userNameField.getText(), passwordField.getText());
+			if (usrResult != null) {
+				manager = new ExpenseManager(usrResult);
+				currentFrame.dispose();
+				openMainWindow(manager);
+			}
+		});
+		
+		JPanel centerPanel = new JPanel();
+		centerPanel.setLayout(new GridLayout(2, 1));
+		centerPanel.add(entryPanel);
+		centerPanel.add(buttonPanel);
+		
+		currentFrame.add(centerPanel, BorderLayout.CENTER);
+		
+		currentFrame.setVisible(true);
+	}
+	
+	static void openMainWindow(ExpenseManager manager) {
+		currentFrame = new JFrame("Seven Pink Buttons");
+        currentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        currentFrame.setSize(600, 300);
+        currentFrame.setLayout(new GridLayout(2, 4, 10, 10)); // 2 rows, 4 columns
 
         // BUTTON 1
         JButton button1 = new JButton("Add Monthly Income");
@@ -41,9 +122,9 @@ public class driver {
         	double monthlyIncome = Double.parseDouble(monthlyIncome1.trim());
         	
     		//creating a Wage object
-    		test.addMonthlyIncome(new Wage(job, monthlyIncome, Month)); 
+        	manager.addMonthlyIncome(new Wage(job, monthlyIncome, Month)); 
         });
-        frame.add(button1);
+        currentFrame.add(button1);
 
         // BUTTON 2
         JButton button2 = new JButton("Add ExpensesFile");
@@ -58,10 +139,10 @@ public class driver {
         	int result = j.showOpenDialog(null);
         	
         	if (result == JFileChooser.APPROVE_OPTION) {
-        		test.loadExpenseFile(j.getSelectedFile().getAbsolutePath());
+        		manager.loadExpenseFile(j.getSelectedFile().getAbsolutePath());
         	}
         });
-        frame.add(button2);
+        currentFrame.add(button2);
 
         // BUTTON 3
         JButton button3 = new JButton("Add IncomeFile");
@@ -78,10 +159,10 @@ public class driver {
         	int result = j.showOpenDialog(null);
         	
         	if (result == JFileChooser.APPROVE_OPTION) {
-        		test.loadIncomeFile(j.getSelectedFile().getAbsolutePath());
+        		manager.loadIncomeFile(j.getSelectedFile().getAbsolutePath());
         	}
         });
-        frame.add(button3);
+        currentFrame.add(button3);
 
         // BUTTON 4
         JButton button4 = new JButton("Add Expense");
@@ -99,12 +180,12 @@ public class driver {
     	    
     		//creating a Wage object
     		Expense expense = new Expense(type, amount, yearlyFreq);
-    		test.addExpense(expense);
+    		manager.addExpense(expense);
     		
     	
         
         });
-        frame.add(button4);
+        currentFrame.add(button4);
 
         // BUTTON 5
         JButton button5 = new JButton("Print Expenses");
@@ -112,9 +193,9 @@ public class driver {
         button5.setOpaque(true);
         button5.setBorderPainted(false);
         button5.addActionListener(e -> {
-        test.PrintExpensebyType();
+        	manager.PrintExpensebyType();
         });
-        frame.add(button5);
+        currentFrame.add(button5);
 
         // BUTTON 6
         JButton button6 = new JButton("Print Full Report");
@@ -122,10 +203,9 @@ public class driver {
         button6.setOpaque(true);
         button6.setBorderPainted(false);
         button6.addActionListener(e -> {
-        	test.PrintFullreport();
+        	manager.PrintFullreport();
         });	        
-        frame.add(button6);
-
+        currentFrame.add(button6);
 
         // BUTTON 7
         JButton button7 = new JButton("Print Monthly Savings");
@@ -133,13 +213,13 @@ public class driver {
         button7.setOpaque(true);
         button7.setBorderPainted(false);
         button7.addActionListener(e -> {
-        	System.out.println(test.userAtHand.getMonthlySavings(test));
+        	System.out.println(manager.userAtHand.getMonthlySavings(manager));
         });
-        frame.add(button7);
+        currentFrame.add(button7);
 
         // Add empty label to fill last cell (2x4 = 8 total spots)
-        frame.add(new JLabel());
+        currentFrame.add(new JLabel());
 
-        frame.setVisible(true);
+        currentFrame.setVisible(true);
 	}
 }
