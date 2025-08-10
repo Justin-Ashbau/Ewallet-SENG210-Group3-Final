@@ -29,6 +29,7 @@ public class driver {
 	public static void main(String[] args) {
 		
 		Users.add(new User("Bob Jimothy", "mypwd123"));
+		Users.add(new User ("a", "a"));
 		
 		openSignIn();
 	}
@@ -90,7 +91,7 @@ public class driver {
 			if (usrResult != null) {
 				manager = new ExpenseManager(usrResult);
 				currentFrame.dispose();
-				openMainWindow(manager);
+				openMainWindow();
 			}
 		});
 		
@@ -104,11 +105,61 @@ public class driver {
 		currentFrame.setVisible(true);
 	}
 	
-	static void openMainWindow(ExpenseManager manager) {
+	static void updateLists(DefaultListModel<String> eList, DefaultListModel<String> iList) {
+		eList.clear();
+		iList.clear();
+		for (Expense e : manager.userAtHand.getSpending()) {
+			eList.addElement(e.toString());
+		}
+		for (Wage i : manager.userAtHand.getIncome()) {
+			iList.addElement(i.toString());
+		}
+	}
+	
+	static void openMainWindow() {
 		currentFrame = new JFrame("Seven Pink Buttons");
         currentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         currentFrame.setSize(600, 300);
-        currentFrame.setLayout(new GridLayout(2, 4, 10, 10)); // 2 rows, 4 columns
+        currentFrame.setLayout(new BorderLayout());
+        
+        DefaultListModel<String> expenseModel = new DefaultListModel<>();
+        DefaultListModel<String> incomeModel = new DefaultListModel<>();
+
+        JList<String> expenseJList = new JList<>(expenseModel);
+        JScrollPane expenseBox = new JScrollPane(expenseJList);
+        
+        JLabel expenseLabel = new JLabel("Expenses:");
+        
+        JPanel expensePanel = new JPanel();
+        expensePanel.setLayout(new GridLayout(2, 1));
+        expensePanel.add(expenseLabel);
+        expensePanel.add(expenseBox);
+        
+        JList<String> incomeJList = new JList<>(incomeModel);
+        JScrollPane incomeBox = new JScrollPane(incomeJList);
+        
+        JLabel incomeLabel = new JLabel("Income:");
+        
+        JPanel incomePanel = new JPanel();
+        incomePanel.setLayout(new GridLayout(2, 1));
+        incomePanel.add(incomeLabel);
+        incomePanel.add(incomeBox);
+        
+        JPanel listPanel = new JPanel();
+        listPanel.setLayout(new GridLayout(1, 2, 10, 5));
+        listPanel.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
+        listPanel.add(expensePanel);
+        listPanel.add(incomePanel);
+        
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout()); // 2 rows, 4 columns
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+   
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new GridLayout(2, 1));
+        centerPanel.add(listPanel);
+        centerPanel.add(buttonPanel);
+        currentFrame.add(centerPanel, BorderLayout.CENTER);
 
         // BUTTON 1
         JButton button1 = new JButton("Add Monthly Income");
@@ -123,8 +174,9 @@ public class driver {
         	
     		//creating a Wage object
         	manager.addMonthlyIncome(new Wage(job, monthlyIncome, Month)); 
+        	updateLists(expenseModel, incomeModel);
         });
-        currentFrame.add(button1);
+        buttonPanel.add(button1);
 
         // BUTTON 2
         JButton button2 = new JButton("Add ExpensesFile");
@@ -141,8 +193,9 @@ public class driver {
         	if (result == JFileChooser.APPROVE_OPTION) {
         		manager.loadExpenseFile(j.getSelectedFile().getAbsolutePath());
         	}
+        	updateLists(expenseModel, incomeModel);
         });
-        currentFrame.add(button2);
+        buttonPanel.add(button2);
 
         // BUTTON 3
         JButton button3 = new JButton("Add IncomeFile");
@@ -161,8 +214,9 @@ public class driver {
         	if (result == JFileChooser.APPROVE_OPTION) {
         		manager.loadIncomeFile(j.getSelectedFile().getAbsolutePath());
         	}
+        	updateLists(expenseModel, incomeModel);
         });
-        currentFrame.add(button3);
+        buttonPanel.add(button3);
 
         // BUTTON 4
         JButton button4 = new JButton("Add Expense");
@@ -181,11 +235,9 @@ public class driver {
     		//creating a Wage object
     		Expense expense = new Expense(type, amount, yearlyFreq);
     		manager.addExpense(expense);
-    		
-    	
-        
+    		updateLists(expenseModel, incomeModel);
         });
-        currentFrame.add(button4);
+        buttonPanel.add(button4);
 
         // BUTTON 5
         JButton button5 = new JButton("Print Expenses");
@@ -195,7 +247,7 @@ public class driver {
         button5.addActionListener(e -> {
         	manager.PrintExpensebyType();
         });
-        currentFrame.add(button5);
+        buttonPanel.add(button5);
 
         // BUTTON 6
         JButton button6 = new JButton("Print Full Report");
@@ -205,7 +257,7 @@ public class driver {
         button6.addActionListener(e -> {
         	manager.PrintFullreport();
         });	        
-        currentFrame.add(button6);
+        buttonPanel.add(button6);
 
         // BUTTON 7
         JButton button7 = new JButton("Print Monthly Savings");
@@ -215,10 +267,10 @@ public class driver {
         button7.addActionListener(e -> {
         	System.out.println(manager.userAtHand.getMonthlySavings(manager));
         });
-        currentFrame.add(button7);
+        buttonPanel.add(button7);
 
         // Add empty label to fill last cell (2x4 = 8 total spots)
-        currentFrame.add(new JLabel());
+        buttonPanel.add(new JLabel());
 
         currentFrame.setVisible(true);
 	}
