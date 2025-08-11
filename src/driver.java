@@ -161,8 +161,6 @@ public class driver {
     			for (int x = expenseModel.getSize() - 1; x >= 0; x--) {
     				System.out.println(x);
     				if (!expenseModel.get(x).split(",")[0].trim().equalsIgnoreCase((String) expenseTypeSelect.getSelectedItem()))  {
-    					
-    					System.out.println("Removed " + expenseModel.get(x));
     					expenseModel.remove(x);
     				}
     			}
@@ -212,8 +210,14 @@ public class driver {
         button1.setBorderPainted(false);
         button1.addActionListener(e -> {
         	String job = JOptionPane.showInputDialog("What is your job title:"); 
+        	if (job == null) return;
+        	
         	String Month = JOptionPane.showInputDialog("Enter the month:"); 
+        	if (Month == null) return;
+        	
         	String monthlyIncome1 = JOptionPane.showInputDialog("Enter your monthly Wage:");
+        	if (monthlyIncome1 == null) return;
+        	
         	double monthlyIncome = Double.parseDouble(monthlyIncome1.trim());
         	
     		//creating a Wage object
@@ -270,9 +274,15 @@ public class driver {
         button4.addActionListener(e -> {
     		//test run addExpense()
         	String type = JOptionPane.showInputDialog("What is the Expense type:"); 
+        	if (type == null) return;
+        	
         	String amtInput = JOptionPane.showInputDialog("Enter the amount:"); 
+        	if (amtInput == null) return;
+        	
         	double amount = Double.parseDouble(amtInput.trim());
         	String freqInput = JOptionPane.showInputDialog("Enter a yearly frequency (1 for once per year, 12 for monthly, or 24 for biweekly:");
+        	if (freqInput == null) return;
+        	
         	Integer yearlyFreq = Integer.parseInt(freqInput);
         	
     	    

@@ -58,7 +58,6 @@ public class ExpenseManager implements Expenser{
 			return false;
 		}
 		
-		
 		return true;
 	}
 
@@ -86,7 +85,6 @@ public class ExpenseManager implements Expenser{
 		
 		System.out.println(report);
 		JOptionPane.showMessageDialog(frame, report);
-		
 	}
 
 	@Override
@@ -183,7 +181,7 @@ public class ExpenseManager implements Expenser{
 		
 		Component frame = null;
 		String search = JOptionPane.showInputDialog("Enter the type of Expense you want to see:");
-		
+		if (search == null) return;
 		
 		String find[];
 		//create arraylist to store all matches and then print them out
