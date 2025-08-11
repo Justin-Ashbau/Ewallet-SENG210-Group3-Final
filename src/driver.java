@@ -105,14 +105,36 @@ public class driver {
 		currentFrame.setVisible(true);
 	}
 	
-	static void updateLists(DefaultListModel<String> eList, DefaultListModel<String> iList) {
-		eList.clear();
-		iList.clear();
+	static void updateLists(DefaultListModel<String> expenseList, DefaultListModel<String> incomeList, JComboBox<String> expenseTypeList) {
+		expenseList.clear();
+		incomeList.clear();
+		expenseTypeList.removeAllItems();
 		for (Expense e : manager.userAtHand.getSpending()) {
-			eList.addElement(e.toString());
+			expenseList.addElement(e.toString());
 		}
 		for (Wage i : manager.userAtHand.getIncome()) {
-			iList.addElement(i.toString());
+			incomeList.addElement(i.toString());
+		}
+		expenseTypeList.addItem("None");
+		for (Expense e : manager.userAtHand.getSpending()) {
+			Boolean duplicate = false;
+			for (int i = 0; i < expenseTypeList.getItemCount(); i++) {
+				if (e.getType().equals(expenseTypeList.getItemAt(i))) {
+					duplicate = true;
+				}
+			}
+			if (!duplicate) expenseTypeList.addItem(e.getType());
+		}
+	}
+	
+	static void updateLists(DefaultListModel<String> expenseList, DefaultListModel<String> incomeList) {
+		expenseList.clear();
+		incomeList.clear();
+		for (Expense e : manager.userAtHand.getSpending()) {
+			expenseList.addElement(e.toString());
+		}
+		for (Wage i : manager.userAtHand.getIncome()) {
+			incomeList.addElement(i.toString());
 		}
 	}
 	
@@ -130,9 +152,31 @@ public class driver {
         
         JLabel expenseLabel = new JLabel("Expenses:");
         
+        JComboBox<String> expenseTypeSelect = new JComboBox<>();
+        expenseTypeSelect.addItem("None");
+        expenseTypeSelect.addActionListener(e -> {
+        	updateLists(expenseModel, incomeModel);
+        	if (expenseTypeSelect.getSelectedItem() != "None") {
+    			//filter list
+    			for (int x = expenseModel.getSize() - 1; x >= 0; x--) {
+    				System.out.println(x);
+    				if (!expenseModel.get(x).split(",")[0].trim().equalsIgnoreCase((String) expenseTypeSelect.getSelectedItem()))  {
+    					
+    					System.out.println("Removed " + expenseModel.get(x));
+    					expenseModel.remove(x);
+    				}
+    			}
+    		}
+        });
+        
+        JPanel expenseSubTextPanel = new JPanel();
+        expenseSubTextPanel.setLayout(new GridLayout(1, 2));
+        expenseSubTextPanel.add(expenseLabel);
+        expenseSubTextPanel.add(expenseTypeSelect);
+        
         JPanel expensePanel = new JPanel();
         expensePanel.setLayout(new GridLayout(2, 1));
-        expensePanel.add(expenseLabel);
+        expensePanel.add(expenseSubTextPanel);
         expensePanel.add(expenseBox);
         
         JList<String> incomeJList = new JList<>(incomeModel);
@@ -174,7 +218,7 @@ public class driver {
         	
     		//creating a Wage object
         	manager.addMonthlyIncome(new Wage(job, monthlyIncome, Month)); 
-        	updateLists(expenseModel, incomeModel);
+        	updateLists(expenseModel, incomeModel, expenseTypeSelect);
         });
         buttonPanel.add(button1);
 
@@ -193,7 +237,7 @@ public class driver {
         	if (result == JFileChooser.APPROVE_OPTION) {
         		manager.loadExpenseFile(j.getSelectedFile().getAbsolutePath());
         	}
-        	updateLists(expenseModel, incomeModel);
+        	updateLists(expenseModel, incomeModel, expenseTypeSelect);
         });
         buttonPanel.add(button2);
 
@@ -214,7 +258,7 @@ public class driver {
         	if (result == JFileChooser.APPROVE_OPTION) {
         		manager.loadIncomeFile(j.getSelectedFile().getAbsolutePath());
         	}
-        	updateLists(expenseModel, incomeModel);
+        	updateLists(expenseModel, incomeModel, expenseTypeSelect);
         });
         buttonPanel.add(button3);
 
@@ -235,7 +279,7 @@ public class driver {
     		//creating a Wage object
     		Expense expense = new Expense(type, amount, yearlyFreq);
     		manager.addExpense(expense);
-    		updateLists(expenseModel, incomeModel);
+    		updateLists(expenseModel, incomeModel, expenseTypeSelect);
         });
         buttonPanel.add(button4);
 
