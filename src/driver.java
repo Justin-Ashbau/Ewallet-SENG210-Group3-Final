@@ -107,7 +107,7 @@ public class driver {
 		currentFrame.setVisible(true);
 	}
 	
-	static void updateElements(DefaultListModel<String> expenseList, DefaultListModel<String> incomeList, JComboBox<String> expenseTypeList) {
+	static void updateElements(DefaultListModel<String> expenseList, DefaultListModel<String> incomeList, JComboBox<String> expenseTypeList, JComboBox<String> incomeTypeList) {
 		expenseList.clear();
 		incomeList.clear();
 		expenseTypeList.removeAllItems();
@@ -117,7 +117,7 @@ public class driver {
 		for (Wage i : manager.userAtHand.getIncome()) {
 			incomeList.addElement(i.toString());
 		}
-		expenseTypeList.addItem("None");
+		expenseTypeList.addItem("All");
 		for (Expense e : manager.userAtHand.getSpending()) {
 			Boolean duplicate = false;
 			for (int i = 0; i < expenseTypeList.getItemCount(); i++) {
@@ -126,6 +126,15 @@ public class driver {
 				}
 			}
 			if (!duplicate) expenseTypeList.addItem(e.getType());
+		}
+		for (Wage w : manager.userAtHand.getIncome()) {
+			Boolean duplicate = false;
+			for (int i = 0; i < incomeTypeList.getItemCount(); i++) {
+				if (w.getType().equals(incomeTypeList.getItemAt(i))) {
+					duplicate = true;
+				}
+			}
+			if (!duplicate) incomeTypeList.addItem(w.getType());
 		}
 		updateMonthlySavingsUI();
 	}
@@ -161,13 +170,12 @@ public class driver {
         JLabel expenseLabel = new JLabel("Expenses:");
         
         JComboBox<String> expenseTypeSelect = new JComboBox<>();
-        expenseTypeSelect.addItem("None");
+        expenseTypeSelect.addItem("All");
         expenseTypeSelect.addActionListener(e -> {
         	updateElements(expenseModel, incomeModel);
-        	if (expenseTypeSelect.getSelectedItem() != "None") {
+        	if (expenseTypeSelect.getSelectedItem() != "All") {
     			//filter list
     			for (int x = expenseModel.getSize() - 1; x >= 0; x--) {
-    				System.out.println(x);
     				if (!expenseModel.get(x).split(",")[0].trim().equalsIgnoreCase((String) expenseTypeSelect.getSelectedItem()))  {
     					expenseModel.remove(x);
     				}
@@ -190,9 +198,28 @@ public class driver {
         
         JLabel incomeLabel = new JLabel("Income:");
         
+        JComboBox<String> incomeTypeSelect = new JComboBox<>();
+        incomeTypeSelect.addItem("All");
+        incomeTypeSelect.addActionListener(e -> {
+        	updateElements(expenseModel, incomeModel);
+        	if (incomeTypeSelect.getSelectedItem() != "All") {
+    			//filter list
+    			for (int x = incomeModel.getSize() - 1; x >= 0; x--) {
+    				if (!incomeModel.get(x).split(",")[0].trim().equalsIgnoreCase((String) incomeTypeSelect.getSelectedItem()))  {
+    					incomeModel.remove(x);
+    				}
+    			}
+    		}
+        });
+        
+        JPanel incomeSubTextPanel = new JPanel();
+        incomeSubTextPanel.setLayout(new GridLayout(1, 2));
+        incomeSubTextPanel.add(incomeLabel);
+        incomeSubTextPanel.add(incomeTypeSelect);
+        
         JPanel incomePanel = new JPanel();
         incomePanel.setLayout(new GridLayout(2, 1));
-        incomePanel.add(incomeLabel);
+        incomePanel.add(incomeSubTextPanel);
         incomePanel.add(incomeBox);
         
         JPanel listPanel = new JPanel();
@@ -230,7 +257,7 @@ public class driver {
         	
     		//creating a Wage object
         	manager.addMonthlyIncome(new Wage(job, monthlyIncome, Month)); 
-        	updateElements(expenseModel, incomeModel, expenseTypeSelect);
+        	updateElements(expenseModel, incomeModel, expenseTypeSelect, incomeTypeSelect);
         });
         buttonPanel.add(button1);
 
@@ -249,7 +276,7 @@ public class driver {
         	if (result == JFileChooser.APPROVE_OPTION) {
         		manager.loadExpenseFile(j.getSelectedFile().getAbsolutePath());
         	}
-        	updateElements(expenseModel, incomeModel, expenseTypeSelect);
+        	updateElements(expenseModel, incomeModel, expenseTypeSelect, incomeTypeSelect);
         });
         buttonPanel.add(button2);
 
@@ -270,7 +297,7 @@ public class driver {
         	if (result == JFileChooser.APPROVE_OPTION) {
         		manager.loadIncomeFile(j.getSelectedFile().getAbsolutePath());
         	}
-        	updateElements(expenseModel, incomeModel, expenseTypeSelect);
+        	updateElements(expenseModel, incomeModel, expenseTypeSelect, incomeTypeSelect);
         });
         buttonPanel.add(button3);
 
@@ -297,17 +324,21 @@ public class driver {
     		//creating a Wage object
     		Expense expense = new Expense(type, amount, yearlyFreq);
     		manager.addExpense(expense);
-    		updateElements(expenseModel, incomeModel, expenseTypeSelect);
+    		updateElements(expenseModel, incomeModel, expenseTypeSelect, incomeTypeSelect);
         });
         buttonPanel.add(button4);
 
         // BUTTON 5
-        JButton button5 = new JButton("Print Expenses");
+        JButton button5 = new JButton("Export Report");
         button5.setBackground(new Color(255, 182, 193));
         button5.setOpaque(true);
         button5.setBorderPainted(false);
         button5.addActionListener(e -> {
-        	manager.PrintExpensebyType();
+        	
+        	String ReportName = JOptionPane.showInputDialog("Enter the name of the file you would like to save:"); 
+        	if (ReportName == null) return;
+        	
+        	manager.exportReport(ReportName);
         });
         buttonPanel.add(button5);
 
@@ -322,12 +353,18 @@ public class driver {
         buttonPanel.add(button6);
 
         // BUTTON 7
-        JButton button7 = new JButton("Print Monthly Savings");
+        JButton button7 = new JButton("When can I Buy?");
         button7.setBackground(new Color(255, 182, 193));
         button7.setOpaque(true);
         button7.setBorderPainted(false);
         button7.addActionListener(e -> {
-        	System.out.println(manager.userAtHand.getMonthlySavings(manager));
+        	String item = JOptionPane.showInputDialog("Enter the name of the item you would like to buy.");
+        	if (item == null) return;
+        	
+        	String price = JOptionPane.showInputDialog("Enter the price of this item:");
+        	if (price == null) return;
+        	
+        	manager.whenCanIBuy(item, Double.parseDouble(price));
         });
         buttonPanel.add(button7);
         
