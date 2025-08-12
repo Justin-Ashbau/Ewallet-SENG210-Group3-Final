@@ -118,7 +118,10 @@ public class ExpenseManager implements Expenser{
 
 	@Override
 	public void PrintFullreport() {
-		System.out.println("<<Full Report>>");
+		
+		String report = "";
+		
+		report += "<<Full Report>> \n";
     	float totalExpense = 0;
     	float totalIncome = 0; 
     	for (Expense s : userAtHand.getSpending()) {
@@ -129,7 +132,7 @@ public class ExpenseManager implements Expenser{
     	}
     	
     	PrintExpensereport();
-    	System.out.println("Total yearly expenses: $" + totalExpense);
+    	report += ("Total yearly expenses: $" + totalExpense + "\n");
     	
     	PrintIncomereport();
     	for (String m : MONTHS) {
@@ -141,18 +144,21 @@ public class ExpenseManager implements Expenser{
 			}
 
 			if (monthlyIncome != 0) { //only print if there is income(s) for the month
-				System.out.println("Total income for " + m + ": $" + monthlyIncome);
+				report += ("Total income for " + m + ": $" + monthlyIncome + "\n");
 			}
     	}
     	
-    	System.out.println("Total yearly income: $" + totalIncome);
+    	report += ("Total yearly income: $" + totalIncome + "\n");
     	
     	double totalSavings = (totalIncome - totalExpense);
     	if (totalSavings >= 0) {
-    		System.out.println("Total savings: $" + totalSavings);
+    		report += ("Total savings: $" + totalSavings + "\n");
     	} else {
-    		System.out.println("Total new debt: $" + totalSavings);
+    		report += ("Total new debt: $" + totalSavings + "\n");
     	}
+    	
+    	System.out.println(report);
+    	JOptionPane.showMessageDialog(null, report);
 	}
 
 	@Override
