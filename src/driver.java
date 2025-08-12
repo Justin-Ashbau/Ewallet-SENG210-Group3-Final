@@ -26,6 +26,8 @@ public class driver {
 	static JFrame currentFrame;
 	static ExpenseManager manager;
 	
+	static JLabel monthlySavingsCounter;
+	
 	public static void main(String[] args) {
 		
 		Users.add(new User("Bob Jimothy", "mypwd123"));
@@ -105,7 +107,7 @@ public class driver {
 		currentFrame.setVisible(true);
 	}
 	
-	static void updateLists(DefaultListModel<String> expenseList, DefaultListModel<String> incomeList, JComboBox<String> expenseTypeList) {
+	static void updateElements(DefaultListModel<String> expenseList, DefaultListModel<String> incomeList, JComboBox<String> expenseTypeList) {
 		expenseList.clear();
 		incomeList.clear();
 		expenseTypeList.removeAllItems();
@@ -125,9 +127,10 @@ public class driver {
 			}
 			if (!duplicate) expenseTypeList.addItem(e.getType());
 		}
+		updateMonthlySavingsUI();
 	}
 	
-	static void updateLists(DefaultListModel<String> expenseList, DefaultListModel<String> incomeList) {
+	static void updateElements(DefaultListModel<String> expenseList, DefaultListModel<String> incomeList) {
 		expenseList.clear();
 		incomeList.clear();
 		for (Expense e : manager.userAtHand.getSpending()) {
@@ -136,6 +139,11 @@ public class driver {
 		for (Wage i : manager.userAtHand.getIncome()) {
 			incomeList.addElement(i.toString());
 		}
+		updateMonthlySavingsUI();
+	}
+	
+	static void updateMonthlySavingsUI() {
+		monthlySavingsCounter.setText("Monthly Savings: " + Double.toString(manager.userAtHand.getMonthlySavings(manager)));
 	}
 	
 	static void openMainWindow() {
@@ -155,7 +163,7 @@ public class driver {
         JComboBox<String> expenseTypeSelect = new JComboBox<>();
         expenseTypeSelect.addItem("None");
         expenseTypeSelect.addActionListener(e -> {
-        	updateLists(expenseModel, incomeModel);
+        	updateElements(expenseModel, incomeModel);
         	if (expenseTypeSelect.getSelectedItem() != "None") {
     			//filter list
     			for (int x = expenseModel.getSize() - 1; x >= 0; x--) {
@@ -222,7 +230,7 @@ public class driver {
         	
     		//creating a Wage object
         	manager.addMonthlyIncome(new Wage(job, monthlyIncome, Month)); 
-        	updateLists(expenseModel, incomeModel, expenseTypeSelect);
+        	updateElements(expenseModel, incomeModel, expenseTypeSelect);
         });
         buttonPanel.add(button1);
 
@@ -241,7 +249,7 @@ public class driver {
         	if (result == JFileChooser.APPROVE_OPTION) {
         		manager.loadExpenseFile(j.getSelectedFile().getAbsolutePath());
         	}
-        	updateLists(expenseModel, incomeModel, expenseTypeSelect);
+        	updateElements(expenseModel, incomeModel, expenseTypeSelect);
         });
         buttonPanel.add(button2);
 
@@ -262,7 +270,7 @@ public class driver {
         	if (result == JFileChooser.APPROVE_OPTION) {
         		manager.loadIncomeFile(j.getSelectedFile().getAbsolutePath());
         	}
-        	updateLists(expenseModel, incomeModel, expenseTypeSelect);
+        	updateElements(expenseModel, incomeModel, expenseTypeSelect);
         });
         buttonPanel.add(button3);
 
@@ -289,7 +297,7 @@ public class driver {
     		//creating a Wage object
     		Expense expense = new Expense(type, amount, yearlyFreq);
     		manager.addExpense(expense);
-    		updateLists(expenseModel, incomeModel, expenseTypeSelect);
+    		updateElements(expenseModel, incomeModel, expenseTypeSelect);
         });
         buttonPanel.add(button4);
 
@@ -322,7 +330,14 @@ public class driver {
         	System.out.println(manager.userAtHand.getMonthlySavings(manager));
         });
         buttonPanel.add(button7);
-
+        
+        monthlySavingsCounter = new JLabel("Monthly Savings: " + manager.userAtHand.getMonthlySavings(manager));
+        
+        JPanel counterPanel = new JPanel();
+        counterPanel.setLayout(new FlowLayout());
+        counterPanel.add(monthlySavingsCounter);
+        currentFrame.add(counterPanel, BorderLayout.SOUTH);
+        
         // Add empty label to fill last cell (2x4 = 8 total spots)
         buttonPanel.add(new JLabel());
 
