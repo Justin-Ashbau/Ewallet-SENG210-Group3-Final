@@ -261,11 +261,12 @@ public class ExpenseManager implements Expenser{
 
 	@Override
 	public Currency convertForeignCurrency(Currency C, double amount) {
-		Currency result = new Currency();
+			Currency result = new Currency(C.name, C.rate);
+			
+			String output = "Your balance in " + C.name + " from USD: " + amount / C.rate;
 
-	        result.name = C.name;
-	        result.rate = C.rate;
-	        System.out.println("Your balance in " + C.name + " from USD: " + amount / C.rate);
+	        System.out.println(output);
+	        JOptionPane.showMessageDialog(null, output);
 
 	        return result;
 	}

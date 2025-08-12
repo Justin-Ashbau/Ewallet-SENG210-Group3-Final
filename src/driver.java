@@ -368,6 +368,26 @@ public class driver {
         });
         buttonPanel.add(button7);
         
+        JButton button8 = new JButton("Convert foreign currency");
+        button8.setBackground(new Color(255, 182, 193));
+        button8.setOpaque(true);
+        button8.setBorderPainted(false);
+        button8.addActionListener(e -> {
+        	String currency = JOptionPane.showInputDialog("Enter the name of the currency.");
+        	if (currency == null) return;
+        	
+        	String rate = JOptionPane.showInputDialog("Enter the rate of the currency.");
+        	if (rate == null) return;
+        	
+        	String amount = JOptionPane.showInputDialog("Enter the amount of currency.");
+        	if (amount == null) return;
+        	
+        	Currency c = new Currency(currency, Double.parseDouble(rate));
+        	
+        	manager.convertForeignCurrency(c, Double.parseDouble(amount));
+        });
+        buttonPanel.add(button8);
+     
         monthlySavingsCounter = new JLabel("Monthly Savings: " + manager.userAtHand.getMonthlySavings(manager));
         
         JPanel counterPanel = new JPanel();
