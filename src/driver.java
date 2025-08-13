@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.awt.BorderLayout;
@@ -30,15 +29,15 @@ public class driver {
 	
 	public static void main(String[] args) {
 		
-		Users.add(new User("Bob Jimothy", "mypwd123"));
-		Users.add(new User ("a", "a"));
+		Derby.createConnection();
 		
 		openSignIn();
 	}
 	
 	static User signIn(String usr, String pswd) {
 		for (User u : Users) {
-			if (u.username.equals(usr) && u.pwd.equals(pswd)) {
+			if (Derby.validateUser(usr, pswd)) {
+				
 				return u;
 			}
 		}
