@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import javax.swing.*;
 
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 public class driver {
 	
 	static ArrayList<User> Users = new ArrayList<User>();
+	static int user_id = 0;
 	
 	//button1: //addMonthlyIncome()
 	//button2: //testing loadExpenseFile()                C:\Users\skkae\Documents\Expenses.txt
@@ -35,11 +37,16 @@ public class driver {
 	}
 	
 	static User signIn(String usr, String pswd) {
-		for (User u : Users) {
-			if (Derby.validateUser(usr, pswd)) {
-				
-				return u;
+
+		if (Derby.validateUser(usr, pswd)) {
+			User u = new User(usr, pswd);
+			try {
+				user_id = Derby.getUserIdByLogin(usr);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+			return u;
 		}
 		
 		JOptionPane.showMessageDialog(currentFrame, "Username or password incorrect");;
@@ -110,14 +117,14 @@ public class driver {
 		expenseList.clear();
 		incomeList.clear();
 		expenseTypeList.removeAllItems();
-		for (Expense e : manager.userAtHand.getSpending()) {
+		for (Expense e : Derby.getExpensesForUser(user_id)) {
 			expenseList.addElement(e.toString());
 		}
-		for (Wage i : manager.userAtHand.getIncome()) {
+		for (Wage i : Derby.getIncomeForUser(user_id)) {
 			incomeList.addElement(i.toString());
 		}
 		expenseTypeList.addItem("All");
-		for (Expense e : manager.userAtHand.getSpending()) {
+		for (Expense e : Derby.getExpensesForUser(user_id)) {
 			Boolean duplicate = false;
 			for (int i = 0; i < expenseTypeList.getItemCount(); i++) {
 				if (e.getType().equals(expenseTypeList.getItemAt(i))) {
@@ -126,7 +133,7 @@ public class driver {
 			}
 			if (!duplicate) expenseTypeList.addItem(e.getType());
 		}
-		for (Wage w : manager.userAtHand.getIncome()) {
+		for (Wage w : Derby.getIncomeForUser(user_id)) {
 			Boolean duplicate = false;
 			for (int i = 0; i < incomeTypeList.getItemCount(); i++) {
 				if (w.getType().equals(incomeTypeList.getItemAt(i))) {
@@ -141,17 +148,24 @@ public class driver {
 	static void updateElements(DefaultListModel<String> expenseList, DefaultListModel<String> incomeList) {
 		expenseList.clear();
 		incomeList.clear();
-		for (Expense e : manager.userAtHand.getSpending()) {
+		for (Expense e : Derby.getExpensesForUser(user_id)) {
 			expenseList.addElement(e.toString());
 		}
-		for (Wage i : manager.userAtHand.getIncome()) {
+		for (Wage i : Derby.getIncomeForUser(user_id)) {
 			incomeList.addElement(i.toString());
 		}
 		updateMonthlySavingsUI();
 	}
 	
 	static void updateMonthlySavingsUI() {
-		monthlySavingsCounter.setText("Monthly Savings: " + Double.toString(manager.userAtHand.getMonthlySavings(manager)));
+		double monthlySavings = 0;
+		try {
+			monthlySavings = Derby.getMonthlySavings(user_id);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		monthlySavingsCounter.setText("Monthly Savings: " + Double.toString(monthlySavings));
 	}
 	
 	static void openMainWindow() {
@@ -386,8 +400,15 @@ public class driver {
         	manager.convertForeignCurrency(c, Double.parseDouble(amount));
         });
         buttonPanel.add(button8);
+        double monthlySavings = 0;
+        try {
+			monthlySavings = Derby.getMonthlySavings(user_id);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
      
-        monthlySavingsCounter = new JLabel("Monthly Savings: " + manager.userAtHand.getMonthlySavings(manager));
+        monthlySavingsCounter = new JLabel("Monthly Savings: " + monthlySavings);
         
         JPanel counterPanel = new JPanel();
         counterPanel.setLayout(new FlowLayout());
