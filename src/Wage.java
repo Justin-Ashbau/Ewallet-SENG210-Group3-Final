@@ -1,4 +1,3 @@
-
 public class Wage {
 	String source;
 	double amount;
@@ -19,5 +18,11 @@ public class Wage {
 	
 	public String getType() {
 		return source;
+	}
+	public double getAmount() {
+		return amount;
+	}
+	public String getMonth() {
+		return Month;
 	}
 }
