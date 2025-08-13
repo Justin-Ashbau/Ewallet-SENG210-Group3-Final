@@ -299,15 +299,22 @@ public class ExpenseManager implements Expenser{
 	}
   
 	@Override
-		public int whenCanIBuy(String itemname, double price) {
-			
-			Component frame = null;
-			int waitTime = (int)Math.round(price/userAtHand.monthlysavings);
-			
-			JOptionPane.showMessageDialog(frame, "You will be able to Purchase " + itemname + " in " + waitTime + " month(s).");
-			
-			return waitTime;
+	public int whenCanIBuy(String itemname, double price) {
+		
+		Component frame = null;
+		double monthlySavings = 0;
+		try {
+			monthlySavings = Derby.getMonthlySavings(user_id);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		int waitTime = (int)Math.round(price/monthlySavings);
+		
+		JOptionPane.showMessageDialog(frame, "You will be able to Purchase " + itemname + " in " + waitTime + " month(s).");
+		
+		return waitTime;
+	}	
 
 	@Override
 	public void updateMonthlySavings() {
@@ -343,6 +350,11 @@ public class ExpenseManager implements Expenser{
     		}
     	}
     	
-    	userAtHand.setMonthlySavings(monthlyIncome - monthlyExpense);
+    	try {
+			Derby.updateMonthlySavings(user_id, monthlyIncome - monthlyExpense);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
