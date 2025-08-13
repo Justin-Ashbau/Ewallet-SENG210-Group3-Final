@@ -1,17 +1,10 @@
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.time.LocalDate;
 
 
@@ -23,12 +16,12 @@ import javax.swing.*;
 
 
 public class ExpenseManager implements Expenser{
-	public User userAtHand;
+	int user_id;
 	
 	final static String[] MONTHS = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 	
 	public ExpenseManager (User user) {
-		userAtHand = user;
+		user_id = Derby.getUserIdByLogin(user.username);
 	}
 	
 	@Override
@@ -46,19 +39,19 @@ public class ExpenseManager implements Expenser{
 			String [] parts = Line.split(",");
 			
 			if(parts.length == 3) {
-				String type = parts[0];
-	            double amount = Double.parseDouble(parts[1]);
-	            int yearlyfrequency = Integer.parseInt(parts[2]);
+				int file_user_id = Integer.parseInt(parts[0]); 
+				String type = parts[1];
+	            double amount = Double.parseDouble(parts[2]);
+	            int yearlyfrequency = Integer.parseInt(parts[3]);
 
 	            Expense e = new Expense(type, amount, yearlyfrequency);
-	            userAtHand.addExpense(e);
+	            Derby.addExpense(file_user_id, e);
 			}
 		}
 		 scnr.close();
 		 Component frame = null;
-			JOptionPane.showMessageDialog(frame, "Loaded " + userAtHand.getSpendingSize() + " expenses!");
-		 System.out.println("Loaded " + userAtHand.getSpendingSize() + " expenses!");
-		  //System.out.println("Loaded " + expenses.size() + " expenses!");
+		 int expenseCount = Derby.expenseLength(user_id);
+			JOptionPane.showMessageDialog(frame, "Loaded " + expenseCount + " expenses!");
 		}
 		catch(FileNotFoundException e){
 			System.out.println("File not found: " + e.getMessage());
@@ -70,20 +63,16 @@ public class ExpenseManager implements Expenser{
 
 	@Override
 	public void addExpense(Expense Ex) {
-		//this method works: someone enters in a Expense object, () and it gets stored into the arrayList expenses
-					
-		//storing the wage object in the array
-		userAtHand.addExpense(Ex);
-		System.out.println(userAtHand.getSpending());
+		Derby.addExpense(user_id, Ex);
 		Component frame = null;
-		JOptionPane.showMessageDialog(frame, userAtHand.getSpending());
+		JOptionPane.showMessageDialog(frame, Derby.getExpensesForUser(user_id));
 	}
 
 	@Override
 	public void PrintExpensereport() {
 		Component frame = null;
 		
-		ArrayList<Expense> expenses = userAtHand.getSpending();
+		ArrayList<Expense> expenses = Derby.getExpensesForUser(user_id);
 		ArrayList<String> report = new ArrayList<String>();
 		
 		for (int i = 0; i < expenses.size(); i++ ) {
@@ -98,7 +87,7 @@ public class ExpenseManager implements Expenser{
 	public void PrintIncomereport() {
 		Component frame = null;
 		
-		ArrayList<Wage> income = userAtHand.getIncome();
+		ArrayList<Wage> income = Derby.getIncomeForUser(user_id);
 		ArrayList<String> report = new ArrayList<String>();
 		
 		for (int i = 0; i < income.size(); i++ ) {
@@ -117,10 +106,9 @@ public class ExpenseManager implements Expenser{
 		
 		
 		//storing the wage object in the array
-		userAtHand.addIncome(W);
+		Derby.addIncome(user_id, W);
 		Component frame = null;
-		JOptionPane.showMessageDialog(frame, userAtHand.getIncome());
-		System.out.println(userAtHand.getIncome());
+		JOptionPane.showMessageDialog(frame, Derby.getIncomeForUser(user_id));
 	}
 
 	@Override
@@ -131,10 +119,10 @@ public class ExpenseManager implements Expenser{
 		report += "<<Full Report>> \n";
     	float totalExpense = 0;
     	float totalIncome = 0; 
-    	for (Expense s : userAtHand.getSpending()) {
+    	for (Expense s : Derby.getExpensesForUser(user_id)) {
     		totalExpense += s.amount * s.yearlyfrequency; // calculate total expense based on frequency
     	}
-    	for (Wage w : userAtHand.getIncome()) {
+    	for (Wage w : Derby.getIncomeForUser(user_id)) {
     		totalIncome += w.amount;
     	}
     	
@@ -144,12 +132,12 @@ public class ExpenseManager implements Expenser{
     	PrintIncomereport();
     	for (String m : MONTHS) {
     		float monthlyIncome = 0;
-			for (Wage w : userAtHand.getIncome()) {
+			for (Wage w : Derby.getIncomeForUser(user_id)) {
 				if (w.Month.equals(m)) {
 					monthlyIncome += w.amount;
 				}
 			}
-			
+
 			if (monthlyIncome != 0) { //only print if there is income(s) for the month
 				report += ("Total income for " + m + ": $" + monthlyIncome + "\n");
 			}
@@ -178,10 +166,10 @@ public class ExpenseManager implements Expenser{
 		int count = 0;
         System.out.println("Type: " + type);
 
-        for (int i = 0; i < userAtHand.getIncome().size(); i++) {
-            if (userAtHand.getIncome().get(i).source.equalsIgnoreCase(type)) {
-                System.out.println("Amount: $" + userAtHand.getIncome().get(i).amount + " in " + userAtHand.getIncome().get(i).Month);
-                total += userAtHand.getIncome().get(i).amount;
+        for (int i = 0; i < Derby.incomeLength(user_id); i++) {
+            if (Derby.getIncomeForUser(user_id).get(i).source.equalsIgnoreCase(type)) {
+                System.out.println("Amount: $" + Derby.getIncomeForUser(user_id).get(i).amount + " in " + Derby.getIncomeForUser(user_id).get(i).Month);
+                total += Derby.getIncomeForUser(user_id).get(i).amount;
 		count++;
             }
         }
@@ -200,7 +188,7 @@ public class ExpenseManager implements Expenser{
 		//create arraylist to store all matches and then print them out
 		ArrayList<Expense> typeTracker = new ArrayList<Expense>();
 		
-		for(Expense word : userAtHand.getSpending()) {
+		for(Expense word : Derby.getExpensesForUser(user_id)) {
 			//System.out.println("Checking: [" + word.getType() + "] vs [" + search + "]");
 			if(word.getType().trim().equalsIgnoreCase(search)) {
 				typeTracker.add(word);					
@@ -210,60 +198,53 @@ public class ExpenseManager implements Expenser{
 		JOptionPane.showMessageDialog(frame, typeTracker);
 	}
 
-@Override
+	@Override
 	public void exportReport(String reportTitle) {
 
-		Component frame = null;
-		
-		try {
-            File report = new File(reportTitle + ".json");
-            if (report.createNewFile()) {
-                System.out.println(report.getName() + " created.");
-            }
-            else {
-                System.out.println("File already exists");
-				JOptionPane.showMessageDialog(frame, "File already exists.");
-            }
-        
-            FileWriter reportWriter = new FileWriter(reportTitle + ".json");
-      
-            switch (reportTitle.toLowerCase()) {
+	    Component frame = null;
 
-                case "expense":
+	    try {
+	        File report = new File(reportTitle + ".json");
+	        if (report.createNewFile()) {
+	            System.out.println(report.getName() + " created.");
+	        } else {
+	            System.out.println("File already exists");
+	            JOptionPane.showMessageDialog(frame, "File already exists.");
+	        }
 
-                    ArrayList<Expense> expenses = userAtHand.getSpending();
+	        try (FileWriter reportWriter = new FileWriter(reportTitle + ".json")) {
 
-                    for (int i = 0; i < expenses.size(); i++) {
-                        reportWriter.write("$" + expenses.get(i).amount + " from " + expenses.get(i).source + " with a frequency of " + expenses.get(i).yearlyfrequency + " times a year.");
-                    }
+	            switch (reportTitle.toLowerCase()) {
 
-                    break;
-                
-                case "income":
+	                case "expense":
+	                    ArrayList<Expense> expenses = Derby.getExpensesForUser(user_id);
+	                    for (int i = 0; i < expenses.size(); i++) {
+	                        reportWriter.write("$" + expenses.get(i).amount +
+	                            " from " + expenses.get(i).source +
+	                            " with a frequency of " + expenses.get(i).yearlyfrequency +
+	                            " times a year.");
+	                    }
+	                    break;
 
-                    ArrayList<Wage> income = userAtHand.getIncome();
+	                case "income":
+	                    ArrayList<Wage> income = Derby.getIncomeForUser(user_id);
+	                    for (int i = 0; i < income.size(); i++) {
+	                        reportWriter.write("$" + income.get(i).amount +
+	                            " from " + income.get(i).source +
+	                            " in the month of " + income.get(i).Month);
+	                    }
+	                    break;
+	            }
+	        }
 
-                    for (int i = 0; i < income.size(); i++) {
-                        reportWriter.write("$" + income.get(i).amount + " from " + income.get(i).source + " in the month of " + income.get(i).Month);
-                    }
+	        System.out.println("Report successfully exported.");
+	        JOptionPane.showMessageDialog(frame, "Report successfully exported.");
 
-                    break;
-
-            }
-
-            reportWriter.close();
-
-            System.out.println("Report successfully exported.");
-			JOptionPane.showMessageDialog(frame, "Report successfully exported.");
-
-        }
-
-        catch (IOException e) {
-            System.out.println("Unexpected error occcured exporting file");
-            e.getStackTrace();
-			JOptionPane.showMessageDialog(frame, "Unexpected error occured during export.");
-        }
-		
+	    } catch (IOException e) {
+	        System.out.println("Unexpected error occurred exporting file");
+	        e.printStackTrace();
+	        JOptionPane.showMessageDialog(frame, "Unexpected error occurred during export.");
+	    }
 	}
 
 	@Override
@@ -296,18 +277,19 @@ public class ExpenseManager implements Expenser{
 				String [] parts = Line.split(",");
 				
 				if(parts.length == 3) {
-					String source = parts[0];
-		            double amount = Double.parseDouble(parts[1]);
-		            String Month = parts[2];
+					int file_user_id = Integer.parseInt(parts[0]);
+					String source = parts[1];
+		            double amount = Double.parseDouble(parts[2]);
+		            String Month = parts[3];
 
 		            Wage e = new Wage(source, amount, Month);
-		            userAtHand.addIncome(e);
+		            Derby.addIncome(file_user_id, e);
 				}
 			}
 			 scnr.close();
-			  System.out.println("Loaded " + userAtHand.getIncomeSize() + " Income!");
+			  System.out.println("Loaded " + Derby.incomeLength(user_id) + " Income!");
 			  Component frame = null;
-				JOptionPane.showMessageDialog(frame, "Loaded " + userAtHand.getIncomeSize() + " rows of Income!");
+				JOptionPane.showMessageDialog(frame, "Loaded " + Derby.incomeLength(user_id) + " rows of Income!");
 			}
 			catch(FileNotFoundException e){
 				System.out.println("File not found: " + e.getMessage());
@@ -315,6 +297,7 @@ public class ExpenseManager implements Expenser{
 			} 
 		return true;
 	}
+  
 	@Override
 		public int whenCanIBuy(String itemname, double price) {
 			
@@ -331,12 +314,12 @@ public class ExpenseManager implements Expenser{
 		float monthlyExpense = 0;
     	float monthlyIncome = 0; 
     	
-    	if (userAtHand.getSpendingSize() <= 0 || userAtHand.getIncomeSize() <= 0) {
+    	if (Derby.expenseLength(user_id) <= 0 || Derby.incomeLength(user_id) <= 0) {
     		System.out.println("there is no spending or income to properly update");
     		return;
     	}
     	
-    	for (Expense s : userAtHand.getSpending()) {
+    	for (Expense s : Derby.getExpensesForUser(user_id)) {
     		if (s.yearlyfrequency >= 12) { // only consider monthly or biweekly expenses
     			monthlyExpense += s.amount * (s.yearlyfrequency / 12); // calculate total expense based on frequency
     		}
@@ -344,7 +327,7 @@ public class ExpenseManager implements Expenser{
 
     	int greatestIndex = 0;
     	for (int i = 0; i < MONTHS.length; i++) {
-    		for (Wage w : userAtHand.getIncome()) {
+    		for (Wage w : Derby.getIncomeForUser(user_id)) {
     			if (MONTHS[i].compareTo(w.Month) == 0 && i > greatestIndex) {
     				System.out.println(w.Month);
     				greatestIndex = i;
@@ -354,7 +337,7 @@ public class ExpenseManager implements Expenser{
     	
     	String curMonth = MONTHS[greatestIndex];
     	
-    	for (Wage w : userAtHand.getIncome()) {
+    	for (Wage w : Derby.getIncomeForUser(user_id)) {
     		if (w.Month.equals(curMonth)) { //if the income is added during the latest possible month
     			monthlyIncome += w.amount;
     		}
