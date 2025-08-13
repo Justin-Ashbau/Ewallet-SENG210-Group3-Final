@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Derby {
-	private static String dbURLembedded="jdbc:derby:C:\\Users\\ashba\\SENG210Final";
+	private static String dbURLembedded="jdbc:derby:C:\\Users\\ashba\\FinalSENG210";
 	private static Connection conn = null;
 	
 	public static void createConnection() {
@@ -161,4 +161,34 @@ public class Derby {
 	    }
 	    return false;
 	}
+	public static Double getMonthlySavings(int userId) throws SQLException {
+        String sql = "SELECT monthly_savings FROM Users WHERE user_id = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("monthly_savings");
+                }
+            }
+        }
+
+        return null;
+    }
+	public static void updateMonthlySavings(int userId, double monthlySavings) throws SQLException {
+        String sql = "UPDATE Users SET monthly_savings = ? WHERE user_id = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDouble(1, monthlySavings);
+            stmt.setInt(2, userId);
+
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Successfully updated monthly_savings for user_id = " + userId);
+            } else {
+                System.out.println("No user found with user_id = " + userId);
+            }
+        }
+    }
 }
