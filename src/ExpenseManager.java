@@ -1,10 +1,17 @@
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 
 
@@ -142,7 +149,7 @@ public class ExpenseManager implements Expenser{
 					monthlyIncome += w.amount;
 				}
 			}
-
+			
 			if (monthlyIncome != 0) { //only print if there is income(s) for the month
 				report += ("Total income for " + m + ": $" + monthlyIncome + "\n");
 			}
@@ -203,61 +210,61 @@ public class ExpenseManager implements Expenser{
 		JOptionPane.showMessageDialog(frame, typeTracker);
 	}
 
-		@Override
-		public void exportReport(String reportTitle) {
-			
-			Component frame = null;
-			
-			try {
-	            File report = new File(reportTitle + ".json");
-	            if (report.createNewFile()) {
-	                System.out.println(report.getName() + " created.");
-	            }
-	            else {
-	                System.out.println("File already exists");
-	                JOptionPane.showMessageDialog(frame, "File already exists.");
-	            }
-	        
-	            FileWriter reportWriter = new FileWriter(reportTitle + ".json");
-	      
-	            switch (reportTitle.toLowerCase()) {
+@Override
+	public void exportReport(String reportTitle) {
 
-	                case "expense":
+		Component frame = null;
+		
+		try {
+            File report = new File(reportTitle + ".json");
+            if (report.createNewFile()) {
+                System.out.println(report.getName() + " created.");
+            }
+            else {
+                System.out.println("File already exists");
+				JOptionPane.showMessageDialog(frame, "File already exists.");
+            }
+        
+            FileWriter reportWriter = new FileWriter(reportTitle + ".json");
+      
+            switch (reportTitle.toLowerCase()) {
 
-	                    ArrayList<Expense> expenses = userAtHand.getSpending();
+                case "expense":
 
-	                    for (int i = 0; i < expenses.size(); i++) {
-	                        reportWriter.write("$" + expenses.get(i).amount + " from " + expenses.get(i).source + " with a frequency of " + expenses.get(i).yearlyfrequency + " times a year.");
-	                    }
+                    ArrayList<Expense> expenses = userAtHand.getSpending();
 
-	                    break;
-	                
-	                case "income":
+                    for (int i = 0; i < expenses.size(); i++) {
+                        reportWriter.write("$" + expenses.get(i).amount + " from " + expenses.get(i).source + " with a frequency of " + expenses.get(i).yearlyfrequency + " times a year.");
+                    }
 
-	                    ArrayList<Wage> income = userAtHand.getIncome();
+                    break;
+                
+                case "income":
 
-	                    for (int i = 0; i < income.size(); i++) {
-	                        reportWriter.write("$" + income.get(i).amount + " from " + income.get(i).source + " in the month of " + income.get(i).Month);
-	                    }
+                    ArrayList<Wage> income = userAtHand.getIncome();
 
-	                    break;
+                    for (int i = 0; i < income.size(); i++) {
+                        reportWriter.write("$" + income.get(i).amount + " from " + income.get(i).source + " in the month of " + income.get(i).Month);
+                    }
 
-	            }
+                    break;
 
-	            reportWriter.close();
+            }
 
-	            System.out.println("Report successfully exported.");
-	            JOptionPane.showMessageDialog(frame, "Report successfully exported." );
+            reportWriter.close();
 
-	        }
+            System.out.println("Report successfully exported.");
+			JOptionPane.showMessageDialog(frame, "Report successfully exported.");
 
-	        catch (IOException e) {
-	            System.out.println("Unexpected error occcured exporting file");
-	            e.getStackTrace();
-	            JOptionPane.showMessageDialog(frame, "Unexpected error occcured exporting file");
-	        }
-			
-		}
+        }
+
+        catch (IOException e) {
+            System.out.println("Unexpected error occcured exporting file");
+            e.getStackTrace();
+			JOptionPane.showMessageDialog(frame, "Unexpected error occured during export.");
+        }
+		
+	}
 
 	@Override
 	public Currency convertForeignCurrency(Currency C, double amount) {
@@ -308,7 +315,6 @@ public class ExpenseManager implements Expenser{
 			} 
 		return true;
 	}
-  
 	@Override
 		public int whenCanIBuy(String itemname, double price) {
 			
