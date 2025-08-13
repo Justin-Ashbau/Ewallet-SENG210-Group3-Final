@@ -19,7 +19,7 @@ public class Derby {
 	}
 
 	public static void addExpense(int user_id, Expense e) {
-	    String sql = "INSERT INTO Expense (user_id, source, amount, yearlyfrequency) VALUES (?, ?, ?, ?)";
+	    String sql = "INSERT INTO Expense (user_id, source, amount, yearly_frequency) VALUES (?, ?, ?, ?)";
 	    try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 	        pstmt.setInt(1, user_id);
 	        pstmt.setString(2, e.getType());
@@ -33,7 +33,7 @@ public class Derby {
 	
 	public static ArrayList<Expense> getExpensesForUser(int user_id) {
         ArrayList<Expense> expenses = new ArrayList<>();
-        String sql = "SELECT source, amount, yearlyfrequency FROM Expense WHERE user_id = ?";
+        String sql = "SELECT source, amount, yearly_frequency FROM Expense WHERE user_id = ?";
         
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, user_id);
@@ -42,7 +42,7 @@ public class Derby {
                 while (rs.next()) {
                     String source = rs.getString("source");
                     double amount = rs.getDouble("amount");
-                    int yearlyfrequency = rs.getInt("yearlyfrequency");
+                    int yearlyfrequency = rs.getInt("yearly_frequency");
                     
                     Expense expense = new Expense(source, amount, yearlyfrequency);
                     expenses.add(expense);
@@ -70,7 +70,7 @@ public class Derby {
 	    return 0;
 	}
 	public static void addIncome(int user_id, Wage w) {
-	    String sql = "INSERT INTO Income (user_id, source, amount, Month) VALUES (?, ?, ?, ?)";
+	    String sql = "INSERT INTO Wage (user_id, source, amount, month) VALUES (?, ?, ?, ?)";
 	    try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 	        pstmt.setInt(1, user_id);
 	        pstmt.setString(2, w.getType());
@@ -84,7 +84,7 @@ public class Derby {
 
 	public static ArrayList<Wage> getIncomeForUser(int user_id) {
 	    ArrayList<Wage> incomeList = new ArrayList<>();
-	    String sql = "SELECT source, amount, Month FROM Income WHERE user_id = ?";
+	    String sql = "SELECT source, amount, month FROM Wage WHERE user_id = ?";
 	    
 	    try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 	        pstmt.setInt(1, user_id);
@@ -107,7 +107,7 @@ public class Derby {
 	}
 
 	public static int incomeLength(int user_id) {
-	    String sql = "SELECT COUNT(*) AS income_count FROM Income WHERE user_id = ?";
+	    String sql = "SELECT COUNT(*) AS income_count FROM Wage WHERE user_id = ?";
 	    try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 	        pstmt.setInt(1, user_id);
 	        try (ResultSet rs = pstmt.executeQuery()) {
@@ -192,3 +192,5 @@ public class Derby {
         }
     }
 }
+
+
