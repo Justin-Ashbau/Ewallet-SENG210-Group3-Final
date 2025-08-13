@@ -218,7 +218,7 @@ public class ExpenseManager implements Expenser{
 	                JOptionPane.showMessageDialog(frame, "File already exists.");
 	            }
 	        
-	            FileWriter reportWriter = new FileWriter(reportTitle + ".csv");
+	            FileWriter reportWriter = new FileWriter(reportTitle + ".json");
 	      
 	            switch (reportTitle.toLowerCase()) {
 
