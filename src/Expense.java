@@ -18,5 +18,11 @@ public class Expense {
 	public String getType() {
 	    return source;
 	}
+	public double getAmount() {
+		return amount;
+	}
+	public int getYearlyFrequency() {
+		return yearlyfrequency;
+	}
 
 }
