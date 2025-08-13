@@ -31,7 +31,8 @@ public class User {
 	public int getSpendingSize() {
 		return Spending.size();
 	}
-	public double getMonthlySavings() {
+	public double getMonthlySavings(ExpenseManager m) {
+		m.updateMonthlySavings();
 		return this.monthlysavings;
 	}
 	public void setMonthlySavings(double savings) {
