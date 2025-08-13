@@ -1,4 +1,5 @@
 import java.io.File;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -26,39 +27,39 @@ public class ExpenseManager implements Expenser{
 	
 	@Override
 	public boolean loadExpenseFile(String filePath) {
-		//Building this code to read a file with three parts on each line:
-		// item, price, yearly frequency (With commas required)
-		
-		try{
-		File file = new File(filePath);
-		Scanner scnr = new Scanner(file);
+	    try (Scanner scnr = new Scanner(new File(filePath))) {
+	        if (scnr.hasNextLine()) {
+	            scnr.nextLine(); // Skip header
+	        }
 
-		
-		while(scnr.hasNextLine()) {	
-			String Line = scnr.nextLine();
-			String [] parts = Line.split(",");
-			
-			if(parts.length == 3) {
-				int file_user_id = Integer.parseInt(parts[0]); 
-				String type = parts[1];
-	            double amount = Double.parseDouble(parts[2]);
-	            int yearlyfrequency = Integer.parseInt(parts[3]);
+	        int loadedCount = 0;
 
-	            Expense e = new Expense(type, amount, yearlyfrequency);
-	            Derby.addExpense(file_user_id, e);
-			}
-		}
-		 scnr.close();
-		 Component frame = null;
-		 int expenseCount = Derby.expenseLength(user_id);
-			JOptionPane.showMessageDialog(frame, "Loaded " + expenseCount + " expenses!");
-		}
-		catch(FileNotFoundException e){
-			System.out.println("File not found: " + e.getMessage());
-			return false;
-		}
-		
-		return true;
+	        while (scnr.hasNextLine()) {
+	            String line = scnr.nextLine().trim();
+	            if (line.isEmpty()) continue;
+
+	            String[] parts = line.split(",");
+
+	            if (parts.length == 4) {
+	                int file_user_id = Integer.parseInt(parts[0].trim());
+	                String source = parts[1].trim();
+	                double amount = Double.parseDouble(parts[2].trim());
+	                int yearlyFrequency = Integer.parseInt(parts[3].trim());
+
+	                Expense e = new Expense(source, amount, yearlyFrequency);
+	                Derby.addExpense(file_user_id, e);
+	                loadedCount++;
+	            }
+	        }
+
+	        Component frame = null;
+	        JOptionPane.showMessageDialog(frame, "Loaded " + loadedCount + " expenses!");
+	        return true;
+
+	    } catch (FileNotFoundException e) {
+	        System.out.println("File not found: " + e.getMessage());
+	        return false;
+	    }
 	}
 
 	@Override
@@ -261,41 +262,39 @@ public class ExpenseManager implements Expenser{
 
 	@Override
 	public boolean loadIncomeFile(String filePath) {
-		//source= job title
-		//amount = income amount
-		//Month
-		//ArrayList <Wage> income = new ArrayList<>();
+	    try (Scanner scnr = new Scanner(new File(filePath))) {
+	        if (scnr.hasNextLine()) {
+	            scnr.nextLine();
+	        }
 
-		//using arraylist wage
-		//stored in an private arraylist in class user
-		try{
-			File file = new File(filePath);
-			Scanner scnr = new Scanner(file);
-			
-			while(scnr.hasNextLine()) {	
-				String Line = scnr.nextLine();
-				String [] parts = Line.split(",");
-				
-				if(parts.length == 3) {
-					int file_user_id = Integer.parseInt(parts[0]);
-					String source = parts[1];
-		            double amount = Double.parseDouble(parts[2]);
-		            String Month = parts[3];
+	        int loadedCount = 0;
 
-		            Wage e = new Wage(source, amount, Month);
-		            Derby.addIncome(file_user_id, e);
-				}
-			}
-			 scnr.close();
-			  System.out.println("Loaded " + Derby.incomeLength(user_id) + " Income!");
-			  Component frame = null;
-				JOptionPane.showMessageDialog(frame, "Loaded " + Derby.incomeLength(user_id) + " rows of Income!");
-			}
-			catch(FileNotFoundException e){
-				System.out.println("File not found: " + e.getMessage());
-				return false;
-			} 
-		return true;
+	        while (scnr.hasNextLine()) {
+	            String line = scnr.nextLine().trim();
+	            if (line.isEmpty()) continue;
+
+	            String[] parts = line.split(",");
+
+	            if (parts.length == 4) {
+	                int file_user_id = Integer.parseInt(parts[0].trim());
+	                String source = parts[1].trim();
+	                double amount = Double.parseDouble(parts[2].trim());
+	                String month = parts[3].trim();
+
+	                Wage w = new Wage(source, amount, month);
+	                Derby.addIncome(file_user_id, w);
+	                loadedCount++;
+	            }
+	        }
+
+	        Component frame = null;
+	        JOptionPane.showMessageDialog(frame, "Loaded " + loadedCount + " incomes!");
+	        return true;
+
+	    } catch (FileNotFoundException e) {
+	        System.out.println("File not found: " + e.getMessage());
+	        return false;
+	    }
 	}
   
 	@Override
