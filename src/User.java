@@ -12,7 +12,6 @@ public class User {
 	// possible monthly savings, calculated using monthly income (most recent) assuming the data we have is for one year, and monthly and biweekly expenses, here you can assume yearly expenses that are recorded have already been paid. 
 	double monthlysavings;	
 	//should add constructor(s)
-	
 	public ArrayList<Wage> getIncome() {
 		return Income;
 	}
@@ -45,3 +44,4 @@ public class User {
 	}
 	
 }
+
